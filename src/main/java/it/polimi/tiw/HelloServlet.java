@@ -1,9 +1,9 @@
-package com.example.tiw_2024_ria;
+package it.polimi.tiw;
 
-import java.io.*;
-
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import javax.servlet.annotation.*;
+import javax.servlet.http.*;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 @WebServlet(name = "helloServlet", value = "/hello-servlet")
 public class HelloServlet extends HttpServlet {
