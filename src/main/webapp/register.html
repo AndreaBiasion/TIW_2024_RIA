@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Register</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="Styling/Register.css" th:href="@{/Styling/Register.css}" />
+    <link rel="stylesheet" type="text/css" href="Styling/General.css">
+</head>
+<body>
+<div class="container">
+    <h1>Registrati</h1>
+    <form action="register" method="post">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+            <label for="name">Nome</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="surname">Cognome</label>
+            <input type="text" id="surname" name="surname" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Ripeti password</label>
+            <input type="password" name="repassword" required>
+        </div>
+
+        <p th:text="${errorMessage}" id="errMsg"></p>
+        <button type="submit">Crea account</button>
+    </form>
+</div>
+</body>
+</html>

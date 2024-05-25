@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Home</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="Styling/Home.css">
+</head>
+<body>
+
+    <header>
+        <h1>Home</h1>
+        <p th:text="${session.user.username}" class="username_welcome">USERNAME</p>
+    </header>
+
+    <div class="btn_container">
+        <a class="create_btn"  th:href="@{/createGroup}">Crea gruppo</a>
+        <a class="logout_btn" th:href="@{/logout}" >Logout</a>
+    </div>
+
+
+    <div class="container">
+
+        <h1>I miei gruppi</h1>
+
+        <table class="table table-bordered ">
+            <thead>
+            <tr>
+                <th>Gruppo</th>
+                <th>Dettagli</th>
+            </tr>
+            </thead>
+            <tbody th:remove="all-but-first">
+            <tr th:each="group : ${groups}">
+                <td th:text="${group.title}"></td>
+                <td><a th:href="@{/fetchDetails(IDGroup=${group.id})}">Vedi dettagli</a></td>
+            </tr>
+            </tbody>
+
+            <p th:text="${noGroupsMessage}"></p>
+        </table>
+
+        <h1>Gruppi in cui sei stato invitato</h1>
+
+        <table class="table table-bordered ">
+            <thead>
+            <tr>
+                <th>Gruppo</th>
+                <th>Dettagli</th>
+            </tr>
+            </thead>
+            <tbody th:remove="all-but-first">
+            <tr th:each="group : ${groupsInvited}">
+                <td th:text="${group.title}"></td>
+                <td><a th:href="@{/fetchDetails(IDGroup=${group.id})}">Vedi dettagli</a></td>
+            </tr>
+            </tbody>
+
+            <p th:text="${noGroupsInvitedMessage}"></p>
+        </table>
+
+    </div>
+
+
+
+</body>
+</html>

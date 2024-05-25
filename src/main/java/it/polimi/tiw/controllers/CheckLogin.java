@@ -10,6 +10,7 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.UnavailableException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -42,7 +43,7 @@ public class CheckLogin extends HttpServlet {
      * @throws ServletException if an initialization error occurs
      */
     @Override
-    public void init() throws ServletException {
+    public void init() throws ServletException, UnavailableException {
         connection = ConnectionManager.getConnection(getServletContext());
         ServletContext servletContext = getServletContext();
         ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
