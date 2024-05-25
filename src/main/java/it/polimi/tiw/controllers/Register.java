@@ -22,7 +22,7 @@ import java.sql.SQLException;
  * This servlet class handles the registration process.
  * It provides methods for handling HTTP GET and POST requests related to registration.
  */
-@WebServlet(name = "registerServlet", value = "/register")
+@WebServlet(name = "registerServlet", value = "/CheckRegister")
 public class Register extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -45,24 +45,6 @@ public class Register extends HttpServlet {
     @Override
     public void init() throws ServletException {
         connection = ConnectionManager.getConnection(getServletContext());
-        ServletContext servletContext = getServletContext();
-        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
-        templateResolver.setTemplateMode(TemplateMode.HTML);
-        this.templateEngine = new TemplateEngine();
-        this.templateEngine.setTemplateResolver(templateResolver);
-        templateResolver.setSuffix(".html");
-        message = "working!";
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("text/html");
-
-        // Hello
-        PrintWriter out = response.getWriter();
-        out.println("<html><body>");
-        out.println("<h1>" + message + "</h1>");
-        out.println("</body></html>");
     }
 
     /**

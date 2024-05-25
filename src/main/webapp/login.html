@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <title>Login</title>
     <meta charset="UTF-8" />
@@ -9,23 +8,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="Styling/Login.css"/>
     <link rel="stylesheet" type="text/css" href="Styling/General.css">
+    <script src="javacript/login.js" charset="UTF-8" defer></script>
+    <script src="javacript/utils.js" charset="UTF-8" defer></script>
 </head>
 <body>
     <div class="main-container">
         <h1 id="app-name">Groupify</h1>
         <div class="container">
             <h1>Accedi</h1>
-            <form action="login" method="post">
+            <form action="#" class="form-signin">
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" th:required="true">
+                    <input type="email" id="email" name="email" required>
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" minlength="4" th:required="true">
+                    <input type="password" id="password" name="password" minlength="4" required>
                 </div>
-                <p th:text="${errorMessage}" th:id="errMsg"></p>
-                <button type="submit">Accedi</button>
+                <p id="errorMessage" hidden></p>
+                <button type="submit" id="login-button">Accedi</button>
             </form>
             <p class="register_text">Non hai un account? <a href="register.html" id="register_link"> Registrati</a></p>
         </div>

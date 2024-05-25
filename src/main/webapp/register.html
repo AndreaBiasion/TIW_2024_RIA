@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <title>Register</title>
     <meta charset="UTF-8" />
@@ -9,11 +8,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="Styling/Register.css" th:href="@{/Styling/Register.css}" />
     <link rel="stylesheet" type="text/css" href="Styling/General.css">
+    <script src="javacript/register.js" charset="UTF-8" defer></script>
+    <script src="javacript/utils.js" charset="UTF-8" defer></script>
 </head>
 <body>
 <div class="container">
     <h1>Registrati</h1>
-    <form action="register" method="post">
+    <form action="CheckRegister" method="post" id="registerForm" class="form-signin">
         <div class="form-group">
             <label for="username">Username</label>
             <input type="text" id="username" name="username" required>
@@ -36,11 +37,11 @@
         </div>
         <div class="form-group">
             <label for="password">Ripeti password</label>
-            <input type="password" name="repassword" required>
+            <input type="password" id="repassword" name="repassword" required>
         </div>
 
-        <p th:text="${errorMessage}" id="errMsg"></p>
-        <button type="submit">Crea account</button>
+        <p id="errorMessage" hidden></p>
+        <button type="submit" id="register-button">Crea account</button>
     </form>
 </div>
 </body>
