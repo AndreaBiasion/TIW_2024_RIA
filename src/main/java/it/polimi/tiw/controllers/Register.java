@@ -9,6 +9,7 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +24,7 @@ import java.sql.SQLException;
  * It provides methods for handling HTTP GET and POST requests related to registration.
  */
 @WebServlet(name = "registerServlet", value = "/CheckRegister")
+@MultipartConfig
 public class Register extends HttpServlet {
 
     private static final long serialVersionUID = 1L;

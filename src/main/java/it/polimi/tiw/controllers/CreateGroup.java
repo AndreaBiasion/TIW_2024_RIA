@@ -9,6 +9,7 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 @WebServlet(name = "createGroupServlet", value = "/createGroup")
+@MultipartConfig
 public class CreateGroup extends HttpServlet {
 
     private static final long serialVersionUID = 1L;

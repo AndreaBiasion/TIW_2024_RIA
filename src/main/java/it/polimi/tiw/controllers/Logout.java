@@ -1,5 +1,6 @@
 package it.polimi.tiw.controllers;
 
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import java.io.IOException;
  * Handles user logout by invalidating the session and redirecting to the login page.
  */
 @WebServlet(name = "logoutServlet", value = "/logout")
+@MultipartConfig
 public class Logout extends HttpServlet {
 
     private static final long serialVersionUID = 1L;

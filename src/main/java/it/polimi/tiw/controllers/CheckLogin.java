@@ -11,6 +11,7 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +25,7 @@ import java.sql.SQLException;
  * Handles login requests by validating user credentials and redirecting to the home page on success.
  */
 @WebServlet(name = "checkLoginServlet", value = "/login")
+@MultipartConfig
 public class CheckLogin extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private Connection connection;
