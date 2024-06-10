@@ -29,7 +29,6 @@ public class Register extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private Connection connection = null;
-    private TemplateEngine templateEngine;
 
     private String message;
 
@@ -93,7 +92,8 @@ public class Register extends HttpServlet {
 
 
             if(isDuplicate) {
-                ctx.setVariable("errorMessage", "L'email/username gia' in uso!");
+                response.setStatus(HttpServletResponse.SC_CONFLICT);
+                response.getWriter().println("Email o username gia' in uso");
             } else {
                 try {
                     userDAO.addUser(username, name, surname, email, password);

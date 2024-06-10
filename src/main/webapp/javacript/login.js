@@ -1,6 +1,6 @@
 (function() { // avoid variables ending up in the global scope
 
-    document.getElementById("login-button").addEventListener('click', (e) => {
+    document.getElementById("loginButton").addEventListener('click', (e) => {
         e.preventDefault()
 
         let form = e.target.closest("form");

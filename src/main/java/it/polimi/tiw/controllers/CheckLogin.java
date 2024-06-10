@@ -29,7 +29,6 @@ import java.sql.SQLException;
 public class CheckLogin extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private Connection connection;
-    private TemplateEngine templateEngine;
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -47,25 +46,6 @@ public class CheckLogin extends HttpServlet {
     @Override
     public void init() throws ServletException, UnavailableException {
         connection = ConnectionManager.getConnection(getServletContext());
-        ServletContext servletContext = getServletContext();
-        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
-        templateResolver.setTemplateMode(TemplateMode.HTML);
-        this.templateEngine = new TemplateEngine();
-        this.templateEngine.setTemplateResolver(templateResolver);
-        templateResolver.setSuffix(".html");
-    }
-
-    /**
-     * Handles GET requests by responding with a simple message.
-     *
-     * @param request  the HttpServletRequest object that contains the request the client has made to the servlet
-     * @param response the HttpServletResponse object that contains the response the servlet sends to the client
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an input or output error is detected when the servlet handles the GET request
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.getWriter().append("Served at: ").append(request.getContextPath());
     }
 
     /**
@@ -87,9 +67,8 @@ public class CheckLogin extends HttpServlet {
         String path;
 
         if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
-            path = "login.html";
-            ctx.setVariable("errorMessage", "Parametri mancanti");
-            templateEngine.process(path, ctx, response.getWriter());
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().println("Credenziali vuote o mancanti");
             return;
         }
 
@@ -100,14 +79,16 @@ public class CheckLogin extends HttpServlet {
             User user = userDAO.checkCredentials(email, password);
 
             if (user == null) {
-                path = "/login.html";
-                ctx.setVariable("errorMessage", "Email o password errati");
-                templateEngine.process(path, ctx, response.getWriter());
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().println("Email o password errati");
             } else {
-                path = request.getContextPath() + "/goToHome";
                 request.getSession().setMaxInactiveInterval(300);
                 request.getSession().setAttribute("user", user);
-                response.sendRedirect(path);
+
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().println(user.getEmail());
             }
         } catch (SQLException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Impossibile validare le credenziali");
