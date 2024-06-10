@@ -1,9 +1,13 @@
-function passwordMatch(){
+function passwordMatch() {
     let pswd1 = document.getElementById("password").value;
     let pswd2 = document.getElementById("repassword").value;
 
-    if(pswd1 != null && pswd2 != null && pswd1 !== "" && pswd2 !== "")
-        return pswd1.match(pswd2);
+    console.log("Password1:", pswd1);
+    console.log("Password2:", pswd2);
+
+    if (pswd1 != null && pswd2 != null && pswd1 !== "" && pswd2 !== "") {
+        return pswd1 === pswd2;
+    }
 
     return false;
 }
@@ -11,16 +15,20 @@ function passwordMatch(){
 (function() { // avoid variables ending up in the global scope
 
     document.getElementById("registerForm").addEventListener('submit', (e) => {
-        e.preventDefault()
+        e.preventDefault();
+
+        console.log("Form submitted");
 
         let form = e.target;
 
         if (form.checkValidity()) {
-            if(!passwordMatch()){
+            if (!passwordMatch()) {
                 document.getElementById("errorMessage").textContent = "Le password non corrispondono (o sono mancanti)!";
                 document.getElementById("errorMessage").hidden = false;
                 return false;
             }
+
+            console.log("Passwords match, making call");
 
             makeCall("POST", 'CheckRegister', form,
                 function(req) {
@@ -29,20 +37,12 @@ function passwordMatch(){
 
                         switch (req.status) {
                             case 200:
+                                console.log("going to login")
                                 window.location.href = "login.html";
                                 break;
                             case 400: // bad request
-                                document.getElementById("errorMessage").textContent = message;
-                                document.getElementById("errorMessage").hidden = false;
-                                break;
                             case 401: // unauthorized
-                                document.getElementById("errorMessage").textContent = message;
-                                document.getElementById("errorMessage").hidden = false;
-                                break;
                             case 409: // conflict
-                                document.getElementById("errorMessage").textContent = message;
-                                document.getElementById("errorMessage").hidden = false;
-                                break;
                             case 500: // server error
                                 document.getElementById("errorMessage").textContent = message;
                                 document.getElementById("errorMessage").hidden = false;
