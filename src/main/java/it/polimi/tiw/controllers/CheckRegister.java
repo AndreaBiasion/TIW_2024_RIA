@@ -2,10 +2,7 @@ package it.polimi.tiw.controllers;
 
 import it.polimi.tiw.dao.UserDAO;
 import it.polimi.tiw.utils.ConnectionManager;
-import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
-import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -15,7 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
@@ -26,7 +22,7 @@ import java.util.regex.Pattern;
  */
 @WebServlet(name = "registerServlet", value = "/CheckRegister")
 @MultipartConfig
-public class Register extends HttpServlet {
+public class CheckRegister extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private Connection connection = null;
@@ -36,7 +32,7 @@ public class Register extends HttpServlet {
     /**
      * Default constructor.
      */
-    public Register(){
+    public CheckRegister(){
         super();
     }
 
