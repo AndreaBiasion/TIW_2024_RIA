@@ -62,9 +62,6 @@ public class CheckLogin extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        ServletContext servletContext = getServletContext();
-        final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-        String path;
 
         if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
