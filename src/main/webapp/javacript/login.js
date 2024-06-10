@@ -13,7 +13,7 @@
 
                         switch (req.status) {
                             case 200:
-                                sessionStorage.setItem('user', message);
+                                sessionStorage.setItem("user", message);
                                 window.location.href = "home.html";
                                 break;
                             case 400: // bad request
