@@ -13,12 +13,12 @@
 
     <header>
         <h1>Home</h1>
-        <p th:text="${session.user.username}" class="username_welcome">USERNAME</p>
+        <p id="id_username" class="username_welcome">USERNAME</p>
     </header>
 
     <div class="btn_container">
-        <a class="create_btn"  th:href="@{/createGroup}">Crea gruppo</a>
-        <a class="logout_btn" th:href="@{/logout}" >Logout</a>
+        <a href="#" class="create_btn">Crea gruppo</a>
+        <a href="logout" class="logout_btn" >Logout</a>
     </div>
 
 
@@ -26,40 +26,40 @@
 
         <h1>I miei gruppi</h1>
 
-        <table class="table table-bordered ">
+        <table id="groupCreatedContainer" class="table table-bordered ">
             <thead>
             <tr>
                 <th>Gruppo</th>
                 <th>Dettagli</th>
             </tr>
             </thead>
-            <tbody th:remove="all-but-first">
-            <tr th:each="group : ${groups}">
-                <td th:text="${group.title}"></td>
-                <td><a th:href="@{/fetchDetails(IDGroup=${group.id})}">Vedi dettagli</a></td>
+            <tbody>
+            <tr>
+                <td id="group_title_created"></td>
+                <td><a href="#">Vedi dettagli</a></td>
             </tr>
             </tbody>
 
-            <p th:text="${noGroupsMessage}"></p>
+            <p id="id_error_created" class="alertMessage"></p>
         </table>
 
         <h1>Gruppi in cui sei stato invitato</h1>
 
-        <table class="table table-bordered ">
+        <table id="groupInvitedContainer" class="table table-bordered ">
             <thead>
             <tr>
                 <th>Gruppo</th>
                 <th>Dettagli</th>
             </tr>
             </thead>
-            <tbody th:remove="all-but-first">
-            <tr th:each="group : ${groupsInvited}">
-                <td th:text="${group.title}"></td>
-                <td><a th:href="@{/fetchDetails(IDGroup=${group.id})}">Vedi dettagli</a></td>
+            <tbody>
+            <tr>
+                <td id="group_title_invited"></td>
+                <td><a href="#">Vedi dettagli</a></td>
             </tr>
             </tbody>
 
-            <p th:text="${noGroupsInvitedMessage}"></p>
+            <p id="id_error_invited" class="alertMessage"></p>
         </table>
 
     </div>
