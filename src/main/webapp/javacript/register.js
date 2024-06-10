@@ -6,7 +6,7 @@ function passwordMatch() {
     console.log("Password2:", pswd2);
 
     if (pswd1 != null && pswd2 != null && pswd1 !== "" && pswd2 !== "") {
-        return pswd1 === pswd2;
+        return pswd1.match(pswd2);
     }
 
     return false;
