@@ -29,7 +29,7 @@ function passwordMatch(){
 
                         switch (req.status) {
                             case 200:
-                                window.location.href = "home.html";
+                                window.location.href = "login.html";
                                 break;
                             case 400: // bad request
                                 document.getElementById("errorMessage").textContent = message;

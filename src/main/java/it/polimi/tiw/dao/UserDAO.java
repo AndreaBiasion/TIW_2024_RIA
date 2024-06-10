@@ -84,6 +84,7 @@ public class UserDAO {
             statement.setString(1, email);
             statement.setString(2, username);
             result = statement.executeQuery();
+            return result.isBeforeFirst();
         } catch (SQLException e) {
             throw new SQLException();
 
@@ -104,7 +105,7 @@ public class UserDAO {
             }
         }
 
-        return result.isBeforeFirst();
+
     }
 
     /**

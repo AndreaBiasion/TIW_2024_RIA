@@ -101,10 +101,8 @@ public class Register extends HttpServlet {
                     response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Impossibile registrare l'utente");
                     return;
                 }
-
                 response.setStatus(HttpServletResponse.SC_OK);
             }
-
 
         }
 
