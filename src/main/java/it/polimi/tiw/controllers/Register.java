@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.regex.Pattern;
 
 /**
  * This servlet class handles the registration process.
@@ -57,15 +58,19 @@ public class Register extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String username = request.getParameter("username");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
         String name = request.getParameter("name");
         String surname = request.getParameter("surname");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
         String repassword = request.getParameter("repassword");
 
-        String path;
-        ServletContext context = getServletContext();
-        final WebContext ctx = new WebContext(request, response, context, request.getLocale());
+
+        if(email == null || password == null || name == null || surname == null || email.isEmpty() || password.isEmpty() || name.isEmpty() || surname.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().println("Missing parameters");
+            return;
+        }
+
 
         // controllo password
         if(!password.equals(repassword)) {
@@ -74,36 +79,36 @@ public class Register extends HttpServlet {
             return;
         }
 
-
-        // controllo field
-        if(email == null || password == null || name == null || surname == null || email.isEmpty() || password.isEmpty() || name.isEmpty() || surname.isEmpty()) {
+        // valida email
+        Pattern emailPattern = Pattern.compile("^.+@.+\\..+$");
+        if(!emailPattern.matcher(email).matches()){
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().println("Missing parameters");
+            response.getWriter().println("Errore: Email non valida");
+            return;
+        }
+
+
+        UserDAO userDAO = new UserDAO(connection);
+
+        boolean isDuplicate = false;
+        try {
+            isDuplicate = userDAO.checkRegister(email, username);
+        } catch (SQLException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SQL error: impossibile controllare unicità dell'email");
+        }
+
+
+        if(isDuplicate) {
+            response.setStatus(HttpServletResponse.SC_CONFLICT);
+            response.getWriter().println("Email o username gia' in uso");
         } else {
-
-            UserDAO userDAO = new UserDAO(connection);
-
-            boolean isDuplicate = false;
             try {
-                isDuplicate = userDAO.checkRegister(email, username);
+                userDAO.addUser(username, name, surname, email, password);
             } catch (SQLException e) {
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SQL error: impossibile controllare unicità dell'email");
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Impossibile registrare l'utente");
+                return;
             }
-
-
-            if(isDuplicate) {
-                response.setStatus(HttpServletResponse.SC_CONFLICT);
-                response.getWriter().println("Email o username gia' in uso");
-            } else {
-                try {
-                    userDAO.addUser(username, name, surname, email, password);
-                } catch (SQLException e) {
-                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Impossibile registrare l'utente");
-                    return;
-                }
-                response.setStatus(HttpServletResponse.SC_OK);
-            }
-
+            response.setStatus(HttpServletResponse.SC_OK);
         }
 
 
