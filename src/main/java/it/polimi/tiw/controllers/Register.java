@@ -70,18 +70,16 @@ public class Register extends HttpServlet {
 
         // controllo password
         if(!password.equals(repassword)) {
-            path = "/register.html";
-            ctx.setVariable("errorMessage", "Errore: Password non coincidono");
-            templateEngine.process(path, ctx, response.getWriter());
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().println("Passwords do not match");
             return;
         }
 
 
         // controllo field
         if(email == null || password == null || name == null || surname == null || email.isEmpty() || password.isEmpty() || name.isEmpty() || surname.isEmpty()) {
-            path = "/register.html";
-            ctx.setVariable("errorMsg", "Errore: Credenziali mancanti o nulle");
-            templateEngine.process(path, ctx, response.getWriter());
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().println("Missing parameters");
         } else {
 
             UserDAO userDAO = new UserDAO(connection);
@@ -104,16 +102,11 @@ public class Register extends HttpServlet {
                     return;
                 }
 
-                path = getServletContext().getContextPath() + "/login.html";
-                response.sendRedirect(path);
+                response.setStatus(HttpServletResponse.SC_OK);
             }
 
 
         }
-
-        // error handling
-        path = "/register.html";
-        templateEngine.process(path, ctx, response.getWriter());
 
 
     }
