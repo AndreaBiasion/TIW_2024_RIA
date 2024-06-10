@@ -97,19 +97,23 @@ public class Register extends HttpServlet {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SQL error: impossibile controllare unicità dell'email");
         }
 
-
         if(isDuplicate) {
             response.setStatus(HttpServletResponse.SC_CONFLICT);
             response.getWriter().println("Email o username gia' in uso");
-        } else {
-            try {
-                userDAO.addUser(username, name, surname, email, password);
-            } catch (SQLException e) {
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Impossibile registrare l'utente");
-                return;
-            }
-            response.setStatus(HttpServletResponse.SC_OK);
+            return;
         }
+
+
+        try {
+            userDAO.addUser(username, name, surname, email, password);
+        } catch (SQLException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().println("Impossibile registrare l'utente");
+            return;
+        }
+
+        response.setStatus(HttpServletResponse.SC_OK);
+
 
 
     }
