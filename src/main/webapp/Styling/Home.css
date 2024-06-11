@@ -100,16 +100,16 @@ button[type="submit"] {
 }
 
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(3px);
+    display: none; /* Modal is hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Disable scrolling */
+    background: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+    align-items: center; /* Vertically center */
+    justify-content: center; /* Horizontally center */
+    backdrop-filter: blur(3px); /* Optional blur effect */
 }
 
 /* Style the form inputs */
@@ -127,16 +127,27 @@ input[type="text"] {
     width: 100%;
 }
 
+.modal-container{
+    width: 100%;
+    margin-top: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 
 .modal-content {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: #fefefe;
-    margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
+    border-radius: 10px;
     width: 80%;
+    max-width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .close {
@@ -162,6 +173,7 @@ td > a {
     color: #007bff;
 }
 
+
 .form_container {
     margin-left: 20%;
     margin-right: 20%;
@@ -173,3 +185,4 @@ td > a {
     align-items: center;
     justify-content: center;
 }
+
