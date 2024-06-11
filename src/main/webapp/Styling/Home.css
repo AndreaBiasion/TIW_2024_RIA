@@ -150,15 +150,17 @@ input[type="text"] {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.close {
+.anag_close, .detail_close {
     color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
+.anag_close:hover,
+.anag_close:focus,
+.detail_close:hover,
+.detail_close:focus{
     color: black;
     text-decoration: none;
     cursor: pointer;

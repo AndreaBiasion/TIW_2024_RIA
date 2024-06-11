@@ -63,6 +63,10 @@
                 linkText = document.createTextNode("Dettagli");
                 anchor.appendChild(linkText);
                 anchor.href = "#";
+                anchor.addEventListener("click", function(event) {
+                    event.preventDefault();
+                    showGroupDetails(group.id);  // Show group details in modal
+                });
                 linkcell.appendChild(anchor);
                 row.appendChild(linkcell);
 
@@ -128,6 +132,10 @@
                 linkText = document.createTextNode("Dettagli");
                 anchor.appendChild(linkText);
                 anchor.href = "#";
+                anchor.addEventListener("click", function(event) {
+                    event.preventDefault();
+                    showGroupDetails(group.id);  // Show group details in modal
+                });
                 linkcell.appendChild(anchor);
                 row.appendChild(linkcell);
 
@@ -222,11 +230,49 @@
         this.reset = function() {
             this.anagListContainer.style.visibility = "hidden";
         }
-
     }
 
+    // Function to show group details in the modal
+    function showGroupDetails(groupId) {
+        makeCall("GET", 'GetGroupDetails?id=' + groupId, null, function(req) {
+            if (req.readyState === 4) {
+                let message = req.responseText;
+                let errorMessage = document.getElementById("id_error_details");
 
-        function PageOrchestrator() {
+                if (req.status === 200) {
+                    let group = JSON.parse(req.responseText);
+
+                    // Fill the modal with group details
+                    document.getElementById("group_name").textContent = group.title;
+                    document.getElementById("group_creation_date").textContent = group.creationDate;
+                    document.getElementById("group_duration").textContent = group.durataAtt;
+
+                    let detailsBody = document.getElementById("detailListBody");
+                    detailsBody.innerHTML = "";
+                    group.users.forEach(function(user) {
+                        let row = document.createElement("tr");
+                        let nameCell = document.createElement("td");
+                        nameCell.textContent = user.name;
+                        row.appendChild(nameCell);
+                        let surnameCell = document.createElement("td");
+                        surnameCell.textContent = user.surname;
+                        row.appendChild(surnameCell);
+                        detailsBody.appendChild(row);
+                    });
+
+                    // Show the modal
+                    document.getElementById("myDetailModal").style.display = "block";
+                } else if (req.status === 403) {
+                    window.location.href = req.getResponseHeader("Location");
+                    window.sessionStorage.removeItem("user");
+                } else {
+                    errorMessage.textContent = message;
+                }
+            }
+        });
+    }
+
+    function PageOrchestrator() {
         this.start = function () {
             document.getElementById("id_username").textContent = window.sessionStorage.getItem("user");
 
@@ -236,7 +282,6 @@
                 document.getElementById("groupListBodyCreated")
             );
 
-
             groupListCreated.show();
 
             // creating the group list invited
@@ -245,7 +290,6 @@
                 document.getElementById("groupListBodyInvited")
             );
 
-
             groupListInvited.show();
 
             anagList = new UsersList(
@@ -253,11 +297,10 @@
                 document.getElementById("anagListBody")
             );
 
-
             anagList.show();
 
             const modal = document.getElementById("myModal");
-            const span = document.getElementsByClassName("close")[0];
+            const span = document.getElementsByClassName("anag_close")[0];
             const btn = document.getElementById("createGroupBtn");
 
             btn.onclick = function() {
@@ -269,11 +312,23 @@
             }
 
             window.onclick = function(event) {
-                if (event.target == modal) {
+                if (event.target === modal) {
                     modal.style.display = "none";
                 }
             }
 
+            const detailModal = document.getElementById("myDetailModal");
+            const detailSpan = document.getElementsByClassName("detail_close")[0];
+
+            detailSpan.onclick = function() {
+                detailModal.style.display = "none";
+            }
+
+            window.onclick = function(event) {
+                if (event.target == detailModal) {
+                    detailModal.style.display = "none";
+                }
+            }
         }
         this.refresh = function () {
             anagList.reset();
