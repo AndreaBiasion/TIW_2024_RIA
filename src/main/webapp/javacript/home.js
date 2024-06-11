@@ -29,7 +29,6 @@
 
                             if(groups.length === 0) {
                                 errorMessage.textContent = "Nessun gruppo creato";
-                                groupListBodyCreated.hidden = true;
                                 return;
                             }
 
@@ -95,7 +94,6 @@
 
                             if(groups.length === 0) {
                                 errorMessage.textContent = "Nessun gruppo in cui sei invitato";
-                                groupListBodyInvited.hidden = true;
                                 return;
                             }
 
@@ -153,7 +151,7 @@
                 document.getElementById("groupListBodyCreated")
             );
 
-            groupListCreated.reset();
+
             groupListCreated.show();
 
             // creating the group list invited
@@ -162,10 +160,13 @@
                 document.getElementById("groupListBodyInvited")
             );
 
-            groupListInvited.reset();
+
             groupListInvited.show();
         }
         this.refresh = function () {
+
+            groupListCreated.reset();
+            groupListInvited.reset();
             console.log("refreshed");
         }
     }
