@@ -240,16 +240,20 @@
                 let errorMessage = document.getElementById("id_error_details");
 
                 if (req.status === 200) {
-                    let group = JSON.parse(req.responseText);
+                    let groupDetails = JSON.parse(req.responseText);
+                    let group = groupDetails.group;
+                    let users = groupDetails.users;
+
+
 
                     // Fill the modal with group details
                     document.getElementById("group_name").textContent = group.title;
-                    document.getElementById("group_creation_date").textContent = group.creationDate;
-                    document.getElementById("group_duration").textContent = group.durataAtt;
+                    document.getElementById("group_creation_date").textContent = "Creato il: " + group.date_creation;
+                    document.getElementById("group_duration").textContent = "Durata attivita': " + group.activity_duration;
 
                     let detailsBody = document.getElementById("detailListBody");
                     detailsBody.innerHTML = "";
-                    group.users.forEach(function(user) {
+                    users.forEach(function(user) {
                         let row = document.createElement("tr");
                         let nameCell = document.createElement("td");
                         nameCell.textContent = user.name;

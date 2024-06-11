@@ -149,7 +149,7 @@ public class UserDAO {
      */
     public List<User> getUsersFromGroup(int idgroup) throws SQLException {
         List<User> users = new ArrayList<>();
-        String query = "select nome,cognome from partecipazione join utente on partecipazione.idpart = utente.username where idgruppo = ?";
+        String query = "select username,nome,cognome from partecipazione join utente on partecipazione.idpart = utente.username where idgruppo = ?";
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
@@ -158,6 +158,7 @@ public class UserDAO {
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 User user = new User();
+                user.setUsername(resultSet.getString("username"));
                 user.setName(resultSet.getString("nome"));
                 user.setSurname(resultSet.getString("cognome"));
                 users.add(user);
@@ -181,7 +182,6 @@ public class UserDAO {
                 throw new SQLException(e2);
             }
         }
-
         return users;
     }
     /**
