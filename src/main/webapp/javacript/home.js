@@ -1,5 +1,5 @@
 {
-    let groupListCreated, groupListInvited, groupDetails, groupListBodyCreated, groupListBodyInvited;
+    let groupListCreated, groupListInvited, groupDetails, groupListBodyCreated, groupListBodyInvited, anagList, anagListBody, anagListContainer;
 
     let pageOrchestrator = new PageOrchestrator();
 
@@ -142,7 +142,91 @@
         }
     }
 
-    function PageOrchestrator() {
+    function UsersList(_anagListContainer, _anagListBody) {
+        this.anagListBody = _anagListBody;
+        this.anagListContainer = _anagListContainer;
+
+        this.show = function () {
+            let self = this;
+            makeCall("GET", 'GetUsersAnag', null,
+                function (req) {
+                    if (req.readyState === 4) {
+                        let message = req.responseText;
+                        let errorMessage = document.getElementById("id_error_anag");
+
+                        if (req.status === 200) {
+                            let users = JSON.parse(req.responseText);
+
+                            if (users.length === 0) {
+                                errorMessage.textContent = "Nessun utente";
+                                this.anagListContainer.style.visibility = "hidden";
+                                return;
+                            }
+
+                            console.log("ci sono utenti");
+
+                            self.update(users);
+                        } else if (req.status === 403) {
+                            window.location.href = req.getResponseHeader("Location");
+                            window.sessionStorage.removeItem("user");
+                        } else {
+                            errorMessage.textContent = message;
+                        }
+                    }
+                })
+        }
+
+        this.update = function (users, selectedUsers) {
+            this.anagListBody.innerHTML = "";
+            let self = this;
+            var row, cell, checkbox, label;
+
+            users.forEach(function (user) {
+                row = document.createElement("tr");
+
+                // Creare la cella del contenuto
+                cell = document.createElement("td");
+
+                // Creare l'input checkbox
+                checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.className = "form-check-input";
+                checkbox.name = "selectedUsers";
+                checkbox.value = user.username;
+                checkbox.id = "flexCheckDefault" + user.username;
+
+                // Impostare l'attributo checked se l'utente è selezionato
+                if (selectedUsers && selectedUsers.includes(user.username)) {
+                    checkbox.checked = true;
+                }
+
+                // Creare l'etichetta per il checkbox
+                label = document.createElement("label");
+                label.className = "form-check-label";
+                label.htmlFor = checkbox.id;
+                label.textContent = user.name + ' ' + user.surname;
+
+                // Aggiungere l'input e l'etichetta alla cella
+                cell.appendChild(checkbox);
+                cell.appendChild(label);
+
+                // Aggiungere la cella alla riga
+                row.appendChild(cell);
+
+                // Aggiungere la riga al corpo della tabella
+                self.anagListBody.appendChild(row);
+            });
+            this.anagListContainer.style.visibility = "visible";
+        }
+
+        this.reset = function() {
+            this.anagListContainer.style.visibility = "hidden";
+        }
+
+    }
+
+
+        function PageOrchestrator() {
         this.start = function () {
             document.getElementById("id_username").textContent = window.sessionStorage.getItem("user");
 
@@ -164,6 +248,14 @@
 
             groupListInvited.show();
 
+            anagList = new UsersList(
+                document.getElementById("anagListContainer"),
+                document.getElementById("anagListBody")
+            );
+
+
+            anagList.show();
+
             const modal = document.getElementById("myModal");
             const span = document.getElementsByClassName("close")[0];
             const btn = document.getElementById("createGroupBtn");
@@ -184,7 +276,7 @@
 
         }
         this.refresh = function () {
-
+            anagList.reset();
             groupListCreated.reset();
             groupListInvited.reset();
             console.log("refreshed");

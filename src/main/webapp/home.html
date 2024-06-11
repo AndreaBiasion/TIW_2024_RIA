@@ -21,15 +21,31 @@
 
     <!--Open the modal-->
 
+    <!-- Open the modal -->
     <!-- The Modal -->
     <div id="myModal" class="modal">
-
         <!-- Modal content -->
         <div class="modal-content">
             <div class="close-icon">
                 <span class="close">&times;</span>
             </div>
-
+            <div class="container">
+                <h2>Utenti registrati</h2>
+                <form action="#" method="post">
+                    <table id="anagListContainer" class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th id="anagTableTitle"></th>
+                        </tr>
+                        </thead>
+                        <tbody id="anagListBody">
+                        <!-- Rows will be dynamically inserted here -->
+                        </tbody>
+                    </table>
+                    <button type="submit" class="btn btn-primary">Invita</button>
+                </form>
+                <p id="selectedCount"></p>
+            </div>
         </div>
     </div>
 
