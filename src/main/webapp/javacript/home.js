@@ -59,7 +59,7 @@
                 // Creare la cella del link
                 linkcell = document.createElement("td");
                 anchor = document.createElement("a");
-                linkText = document.createTextNode("Vedi Dettagli");
+                linkText = document.createTextNode("Dettagli");
                 anchor.appendChild(linkText);
                 anchor.href = "#";
                 linkcell.appendChild(anchor);
@@ -70,7 +70,6 @@
             });
             this.groupCratedContainer.style.visibility = "visible";
         }
-
 
         this.reset = function() {
             this.groupCratedContainer.style.visibility = "hidden";
@@ -124,7 +123,7 @@
                 // Creare la cella del link
                 linkcell = document.createElement("td");
                 anchor = document.createElement("a");
-                linkText = document.createTextNode("Vedi Dettagli");
+                linkText = document.createTextNode("Dettagli");
                 anchor.appendChild(linkText);
                 anchor.href = "#";
                 linkcell.appendChild(anchor);
@@ -162,6 +161,24 @@
 
 
             groupListInvited.show();
+
+            var modal = document.getElementById("myModal");
+            var span = document.getElementsByClassName("close")[0];
+            var btn = document.getElementById("createGroupBtn");
+            btn.onclick = function() {
+                modal.style.display = "block";
+            }
+
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+
         }
         this.refresh = function () {
 
