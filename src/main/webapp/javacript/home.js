@@ -12,8 +12,9 @@
         }
     }, false);
 
-    function GroupListCreated(groupTitle, groupListBodyCreated) {
-        this.groupListBodyCreated = groupListBodyCreated;
+    function GroupListCreated(_groupCratedContainer, _groupListBodyCreated) {
+        this.groupListBodyCreated = _groupListBodyCreated;
+        this.groupCratedContainer = _groupCratedContainer;
 
         this.show = function () {
             let self = this;
@@ -46,32 +47,46 @@
         this.update = function (groups) {
             this.groupListBodyCreated.innerHTML = "";
             let self = this;
+            var row, titlecell, linkcell, anchor, linkText;
 
             groups.forEach(function (group) {
-                let row = document.createElement("tr");
-                let groupTitle = document.createElement("td");
-                let groupDetails = document.getElementById("group_details_invited");
+                row = document.createElement("tr");
 
-                groupTitle.textContent = group.title;
-                row.appendChild(groupTitle);
-                row.appendChild(groupDetails);
-                self.groupListBodyCreated.appendChild(row); // Aggiungi la riga al corpo della tabella
+                // Creare la cella del titolo
+                titlecell = document.createElement("td");
+                titlecell.textContent = group.title;
+                row.appendChild(titlecell);
+
+                // Creare la cella del link
+                linkcell = document.createElement("td");
+                anchor = document.createElement("a");
+                linkText = document.createTextNode("Vedi Dettagli");
+                anchor.appendChild(linkText);
+                anchor.href = "#";
+                linkcell.appendChild(anchor);
+                row.appendChild(linkcell);
+
+                // Aggiungere la riga al corpo della tabella
+                self.groupListBodyCreated.appendChild(row);
             });
+            this.groupCratedContainer.style.visibility = "visible";
         }
 
+
         this.reset = function() {
-            groupTitle.hidden = true;
+            this.groupCratedContainer.style.visibility = "hidden";
         }
     }
 
-    function GroupListInvited(groupTitle, groupListBodyInvited) {
-        this.groupListBodyInvited = groupListBodyInvited;
+    function GroupListInvited(_groupInvitedContainer, _groupListBodyInvited) {
+        this.groupListBodyInvited = _groupListBodyInvited;
+        this.groupInvitedContainer = _groupInvitedContainer;
 
         this.show = function () {
             let self = this;
             makeCall("GET", 'GetGroupsInvited', null,
                 function(req) {
-                    if (req.readyState == 4) {
+                    if (req.readyState === 4) {
                         let message = req.responseText;
                         let errorMessage = document.getElementById("id_error_invited");
 
@@ -98,21 +113,33 @@
         this.update = function (groups) {
             this.groupListBodyInvited.innerHTML = "";
             let self = this;
+            var row, titlecell, linkcell, anchor, linkText;
 
             groups.forEach(function (group) {
-                let row = document.createElement("tr");
-                let groupTitle = document.createElement("td");
-                let groupDetails = document.getElementById("group_details_invited");
+                row = document.createElement("tr");
 
-                groupTitle.textContent = group.title;
-                row.appendChild(groupTitle);
-                row.appendChild(groupDetails)
-                self.groupListBodyInvited.appendChild(row); // Aggiungi la riga al corpo della tabella
+                // Creare la cella del titolo
+                titlecell = document.createElement("td");
+                titlecell.textContent = group.title;
+                row.appendChild(titlecell);
+
+                // Creare la cella del link
+                linkcell = document.createElement("td");
+                anchor = document.createElement("a");
+                linkText = document.createTextNode("Vedi Dettagli");
+                anchor.appendChild(linkText);
+                anchor.href = "#";
+                linkcell.appendChild(anchor);
+                row.appendChild(linkcell);
+
+                // Aggiungere la riga al corpo della tabella
+                self.groupListBodyInvited.appendChild(row);
             });
+            this.groupInvitedContainer.style.visibility = "visible";
         }
 
         this.reset = function() {
-            groupTitle.hidden = true;
+            this.groupInvitedContainer.style.visibility = "hidden";
         }
     }
 
@@ -122,7 +149,7 @@
 
             // creating the group list created by the user
             groupListCreated = new GroupListCreated(
-                document.getElementById("group_title_created"),
+                document.getElementById("groupCreatedContainer"),
                 document.getElementById("groupListBodyCreated")
             );
 
@@ -131,7 +158,7 @@
 
             // creating the group list invited
             groupListInvited = new GroupListInvited(
-                document.getElementById("group_title_invited"),
+                document.getElementById("groupInvitedContainer"),
                 document.getElementById("groupListBodyInvited")
             );
 
