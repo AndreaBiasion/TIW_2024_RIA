@@ -10,7 +10,7 @@ body {
     background-color: #f5f5f5;
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    padding-bottom: 50px;
 }
 
 .container{
@@ -81,6 +81,24 @@ header{
     background-color: #0056b3;
 }
 
+
+.crea-container {
+    display: flex;
+    width: 100%;
+}
+
+button[type="submit"] {
+    margin-top: 10px;
+    font-size: 15px;
+    padding: 13px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
 .modal {
     display: none;
     position: fixed;
@@ -89,12 +107,31 @@ header{
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
-    background-color: rgb(0, 0, 0);
-    background-color: rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
 }
 
+/* Style the form inputs */
+input[type="number"],
+input[type="text"] {
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #d5dbe1;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+}
+
+.close-icon{
+    display: flex;
+    width: 100%;
+}
+
+
 .modal-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: #fefefe;
     margin: 15% auto;
     padding: 20px;
@@ -123,4 +160,16 @@ a {
 
 td > a {
     color: #007bff;
+}
+
+.form_container {
+    margin-left: 20%;
+    margin-right: 20%;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }

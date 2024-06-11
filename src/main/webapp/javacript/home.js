@@ -29,6 +29,7 @@
 
                             if(groups.length === 0) {
                                 errorMessage.textContent = "Nessun gruppo creato";
+                                this.groupInvitedContainer.style.visibility = "hidden";
                                 return;
                             }
 
@@ -93,6 +94,7 @@
 
                             if(groups.length === 0) {
                                 errorMessage.textContent = "Nessun gruppo in cui sei invitato";
+                                this.groupInvitedContainer.style.visibility = "hidden";
                                 return;
                             }
 
@@ -162,9 +164,10 @@
 
             groupListInvited.show();
 
-            var modal = document.getElementById("myModal");
-            var span = document.getElementsByClassName("close")[0];
-            var btn = document.getElementById("createGroupBtn");
+            const modal = document.getElementById("myModal");
+            const span = document.getElementsByClassName("close")[0];
+            const btn = document.getElementById("createGroupBtn");
+
             btn.onclick = function() {
                 modal.style.display = "block";
             }
