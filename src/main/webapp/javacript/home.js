@@ -261,6 +261,16 @@
                         let surnameCell = document.createElement("td");
                         surnameCell.textContent = user.surname;
                         row.appendChild(surnameCell);
+
+                        row.draggable = true;
+                        row.setAttribute('data-username', user.username);
+
+
+                        row.addEventListener('dragstart', function(event) {
+                            event.dataTransfer.setData('text/plain', this.getAttribute('data-username'));
+                        });
+
+
                         detailsBody.appendChild(row);
                     });
 
@@ -274,6 +284,28 @@
                 }
             }
         });
+    }
+
+    // Event listeners for drag and drop
+    document.getElementById("trashBin").addEventListener('dragover', function(event) {
+        event.preventDefault();
+        this.style.backgroundColor = '#f1f1f1';
+    });
+
+    document.getElementById("trashBin").addEventListener('dragleave', function(event) {
+        this.style.backgroundColor = 'transparent';
+    });
+
+    document.getElementById("trashBin").addEventListener('drop', function(event) {
+        event.preventDefault();
+        let username = event.dataTransfer.getData('text/plain');
+        removeUserFromGroup(username);
+        this.style.backgroundColor = 'transparent';
+    });
+
+    function removeUserFromGroup(username) {
+        console.log("Rimuovi utente:", username);
+
     }
 
     function PageOrchestrator() {

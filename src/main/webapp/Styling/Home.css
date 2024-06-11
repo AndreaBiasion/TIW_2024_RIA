@@ -188,3 +188,18 @@ td > a {
     justify-content: center;
 }
 
+.trash-bin {
+    margin-top: 20px;
+    border: 2px dashed #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.trash-bin .fa-trash {
+    font-size: 48px;
+    color: #ccc;
+}
+
+.draggable {
+    cursor: move;
+}
