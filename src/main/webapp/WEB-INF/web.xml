@@ -27,9 +27,13 @@
     <filter-mapping>
         <filter-name>Checker</filter-name>
         <url-pattern>/goToHome</url-pattern>
-        <url-pattern>/fetchDetails</url-pattern>
+        <url-pattern>/GetGroupDetails</url-pattern>
+        <url-pattern>/GetGroupsCreated</url-pattern>
+        <url-pattern>/GetGroupsInvited</url-pattern>
+        <url-pattern>/GetUsersAnag</url-pattern>
         <url-pattern>/createGroup</url-pattern>
         <url-pattern>/goToAnag</url-pattern>
+        <url-pattern>/</url-pattern>
         <url-pattern>/home.html</url-pattern>
     </filter-mapping>
     <welcome-file-list>
