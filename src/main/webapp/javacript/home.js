@@ -360,10 +360,13 @@
 
         let errorMessage = document.getElementById("errorMessage");
 
+
         this.registerEvents = function (orchestrator) {
             let form = this.wizard;
             var valid = true;
 
+            let min_part;
+            let max_part;
 
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
@@ -371,8 +374,8 @@
 
                 if(form.checkValidity()){
 
-                    let min_part = document.getElementById("min_part").value;
-                    let max_part = document.getElementById("max_part").value;
+                    min_part = document.getElementById("min_part").value;
+                    max_part = document.getElementById("max_part").value;
                     let durata = document.getElementById("durata_att").value;
 
 
@@ -426,33 +429,27 @@
             })
 
             let anagForm = document.getElementById("anagListForm");
+            let errorCount = 0;
             anagForm.addEventListener("submit", (e) => {
                 e.preventDefault();
 
-                // Inizializza l'errorCount da localStorage o a 0 se non esiste
-                let errorCount = localStorage.getItem('errorCount');
-                if (errorCount === null) {
-                    errorCount = 0;
-                } else {
-                    errorCount = parseInt(errorCount);
-                }
 
                 let selectedUsers = document.querySelectorAll('input[name="selectedUsers"]:checked');
-                const minPart = parseInt(document.getElementById("min_part").value);
-                const maxPart = parseInt(document.getElementById("max_part").value);
-                while(errorCount < 2){
-                    if (selectedUsers.length < minPart || selectedUsers.length > maxPart) {
-                        document.getElementById("errorMessage").textContent = "Errore: il numero di utenti selezionati non rispetta i vincoli";
-                        errorCount++;
-                        console.log("errorCount", errorCount);
-                        localStorage.setItem('errorCount', errorCount);
-                        return;
-                    }
+
+
+                if (selectedUsers.length < min_part || selectedUsers.length > max_part) {
+                    document.getElementById("id_error_anag").textContent = "Errore: il numero di utenti selezionati non rispetta i vincoli";
+                    errorCount++;
+                    console.log("errorCount", errorCount);
                 }
 
-                // Resetta il contatore degli errori se il form è stato inviato correttamente
-                localStorage.setItem('errorCount', 0);
-                orchestrator.refresh();
+                if(errorCount > 2) {
+                    document.getElementById("myModal").style.display = "none";
+                    document.getElementById("id_error_anag").textContent = "";
+                    orchestrator.refresh();
+                }
+
+
             });
 
 
