@@ -429,9 +429,32 @@
             anagForm.addEventListener("submit", (e) => {
                 e.preventDefault();
 
+                // Inizializza l'errorCount da localStorage o a 0 se non esiste
+                let errorCount = localStorage.getItem('errorCount');
+                if (errorCount === null) {
+                    errorCount = 0;
+                } else {
+                    errorCount = parseInt(errorCount);
+                }
 
+                let selectedUsers = document.querySelectorAll('input[name="selectedUsers"]:checked');
+                const minPart = parseInt(document.getElementById("min_part").value);
+                const maxPart = parseInt(document.getElementById("max_part").value);
+                while(errorCount < 2){
+                    if (selectedUsers.length < minPart || selectedUsers.length > maxPart) {
+                        document.getElementById("errorMessage").textContent = "Errore: il numero di utenti selezionati non rispetta i vincoli";
+                        errorCount++;
+                        console.log("errorCount", errorCount);
+                        localStorage.setItem('errorCount', errorCount);
+                        return;
+                    }
+                }
 
-            })
+                // Resetta il contatore degli errori se il form è stato inviato correttamente
+                localStorage.setItem('errorCount', 0);
+                orchestrator.refresh();
+            });
+
 
         }
 
