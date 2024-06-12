@@ -66,7 +66,7 @@
 
                 anchor.addEventListener("click", function(event) {
                     event.preventDefault();
-                    detailsList = new showGroupDetails(group.id); // Show group details in modal
+                    detailsList = new showGroupDetails(group.id, _groupListBodyCreated); // Show group details in modal
                 });
                 linkcell.appendChild(anchor);
                 row.appendChild(linkcell);
@@ -135,7 +135,7 @@
                 anchor.href = "#";
                 anchor.addEventListener("click", function(event) {
                     event.preventDefault();
-                    showGroupDetails(group.id);  // Show group details in modal
+                    showGroupDetails(group.id, _groupListBodyInvited);  // Show group details in modal
                 });
                 linkcell.appendChild(anchor);
                 row.appendChild(linkcell);
@@ -234,7 +234,7 @@
     }
 
     // Function to show group details in the modal
-    function showGroupDetails(groupId) {
+    function showGroupDetails(groupId, body) {
         let errorMessage = document.getElementById("id_error_details");
         makeCall("GET", 'GetGroupDetails?id=' + groupId, null, function(req) {
             if (req.readyState === 4) {
@@ -263,14 +263,17 @@
                         surnameCell.textContent = user.surname;
                         row.appendChild(surnameCell);
 
-                        row.draggable = true;
-                        row.setAttribute('data-username', user.username);
-                        row.setAttribute('id_group', group.id);
+                        if(body === document.getElementById("groupListBodyCreated")) {
+                            row.draggable = true;
+                            row.setAttribute('data-username', user.username);
+                            row.setAttribute('id_group', group.id);
 
+                            document.getElementById("trashBin").style.display = "block";
 
-                        row.addEventListener('dragstart', function(event) {
-                            event.dataTransfer.setData('text/plain', JSON.stringify({username: this.getAttribute('data-username'), groupId: this.getAttribute('id_group')}));
-                        });
+                            row.addEventListener('dragstart', function(event) {
+                                event.dataTransfer.setData('text/plain', JSON.stringify({username: this.getAttribute('data-username'), groupId: this.getAttribute('id_group')}));
+                            });
+                        }
 
 
 
@@ -315,11 +318,21 @@
         console.log("Rimuovi utente:", username, "dal gruppo:", groupId);
         let errorMessage = document.getElementById("id_error_details");
 
+
+        let currentUser = sessionStorage.getItem("user").trim();
+
+
+        if(username.trim() === currentUser) {
+            errorMessage.textContent = "Non puoi eliminare te stesso";
+            return;
+        }
+
         // Aggiungi la logica per rimuovere l'utente dal gruppo usando una chiamata al server
         makeCall("POST", "RemoveUser?id=" + groupId + "&username=" + username, null,
             function(req) {
                 if (req.readyState === 4) {
                     if (req.status === 200) {
+                        errorMessage.textContent = "Utente rimosso con successo";
                         console.log("Utente rimosso con successo");
                         // Rimuovi la riga dalla tabella
                         let detailsBody = document.getElementById("detailListBody");
@@ -331,7 +344,6 @@
                             }
                         }
                     } else {
-
                         errorMessage.textContent = "Errore: hai raggiunto il minimo di partecipanti";
                         console.error("Errore nella rimozione dell'utente:", req.responseText);
                     }
@@ -431,8 +443,24 @@
     }
 
 
+    function checkSelectedUsers() {
+        let selectedUsers = document.querySelectorAll('input[name="selectedUsers"]:checked');
+        let min_part = parseInt(document.getElementById("min_part").value);
+        let max_part = parseInt(document.getElementById("max_part").value);
+
+        if (selectedUsers.length < min_part || selectedUsers.length > max_part) {
+            errorMessage.textContent = "Errore: il numero di utenti selezionati non rispetta i vincoli";
+            return false;
+        }
+
+        errorMessage.textContent = "";
+        return true;
+    }
+
+
     function PageOrchestrator() {
         this.start = function () {
+
             document.getElementById("id_username").textContent = window.sessionStorage.getItem("user");
 
             // creating the group list created by the user
