@@ -10,6 +10,7 @@ import org.thymeleaf.context.WebContext;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +27,8 @@ import java.util.List;
  * Servlet implementation class GoToAnag
  * Handles requests to navigate to the anagraphic page, where users can invite other users to groups.
  */
-@WebServlet(name = "createGroupServelt", value = "/createGroup")
+@WebServlet(name = "createGroupServelt", value = "/CreateGroup")
+@MultipartConfig
 public class CreateGroup extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private Connection connection;
@@ -93,10 +95,6 @@ public class CreateGroup extends HttpServlet {
         min_part--;
         max_part--;
 
-        Integer errorCount = (Integer) session.getAttribute("errorCount");
-        if (errorCount == null) {
-            errorCount = 0;
-        }
 
         String[] selectedUsers = request.getParameterValues("selectedUsers");
         List<String> usernames = new ArrayList<>();
@@ -108,8 +106,7 @@ public class CreateGroup extends HttpServlet {
             }
         }
 
-        while (errorCount < 2) {
-            if (selectedCount < min_part) {
+         if (selectedCount < min_part) {
                 request.getSession().setAttribute("selectedUsers", usernames);
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
@@ -128,25 +125,7 @@ public class CreateGroup extends HttpServlet {
                 }
                 return;
             }
-            return;
-        }
 
-        if (selectedCount >= min_part && selectedCount <= max_part) {
-            GroupDAO groupDAO = new GroupDAO(connection);
-            try {
-                usernames.add(user.getUsername());
-                groupDAO.createGroup(usernames, g, user.getUsername());
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-
-            request.getSession().removeAttribute("errorCount");
-            request.getSession().removeAttribute("errorMessage");
-            request.getSession().removeAttribute("selectedUsers");
-            return;
-        }
-
-        request.setAttribute("selectedCount", selectedCount);
     }
 
     /**

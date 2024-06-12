@@ -465,6 +465,20 @@
                     orchestrator.refresh();
                 }
 
+                makeCall("POST", "CreateGroup?title="+titolo+"&durata="+durata+ "&min_part="+min_part+ "&max_part="+max_part, form,
+                    function(req) {
+                        if (req.readyState === XMLHttpRequest.DONE) {
+                            let message = req.responseText;
+
+                            if(req.status === 200) {
+                                console.log("Gruppo creato con successo");
+                                orchestrator.refresh();
+                            } else {
+                                console.error("Errore nella creazione del gruppo:", message);
+                            }
+                        }
+                    }
+                );
 
             });
 
