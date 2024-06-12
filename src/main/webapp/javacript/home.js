@@ -275,13 +275,14 @@
                             });
                         }
 
-
-
                         detailsBody.appendChild(row);
                     });
 
                     // Show the modal
                     document.getElementById("myDetailModal").style.display = "block";
+                    sessionStorage.setItem("detailModalOpen", "true");
+                    sessionStorage.setItem("currentGroupId", groupId);
+
                 } else if (req.status === 403) {
                     window.location.href = req.getResponseHeader("Location");
                     window.sessionStorage.removeItem("user");
@@ -365,8 +366,11 @@
             let form = this.wizard;
             var valid = true;
 
+            let titolo;
+            let durata;
             let min_part;
             let max_part;
+
 
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
@@ -374,9 +378,10 @@
 
                 if(form.checkValidity()){
 
+                    titolo = document.getElementById("title").value;
                     min_part = document.getElementById("min_part").value;
                     max_part = document.getElementById("max_part").value;
-                    let durata = document.getElementById("durata_att").value;
+                    durata = document.getElementById("durata_att").value;
 
 
                     if(min_part > max_part || min_part <= 1) {
@@ -408,10 +413,12 @@
 
                                     anagList.show();
 
+
                                     const modal = document.getElementById("myModal");
                                     const span = document.getElementsByClassName("anag_close")[0];
 
                                     modal.style.display = "block";
+                                    sessionStorage.setItem("anagModalOpen", "true");
 
                                     span.onclick = function () {
                                         modal.style.display = "none";
@@ -470,23 +477,11 @@
     }
 
 
-    function checkSelectedUsers() {
-        let selectedUsers = document.querySelectorAll('input[name="selectedUsers"]:checked');
-        let min_part = parseInt(document.getElementById("min_part").value);
-        let max_part = parseInt(document.getElementById("max_part").value);
-
-        if (selectedUsers.length < min_part || selectedUsers.length > max_part) {
-            errorMessage.textContent = "Errore: il numero di utenti selezionati non rispetta i vincoli";
-            return false;
-        }
-
-        errorMessage.textContent = "";
-        return true;
-    }
-
 
     function PageOrchestrator() {
         this.start = function () {
+
+            localStorage.removeItem("errorCount");
 
             document.getElementById("id_username").textContent = window.sessionStorage.getItem("user");
 
@@ -524,12 +519,17 @@
                     detailsList.reset();
                 }
             }
+
+            if (sessionStorage.getItem("detailModalOpen") === "true") {
+                let groupId = sessionStorage.getItem("currentGroupId");
+                showGroupDetails(groupId, document.getElementById("groupListBodyCreated"));
+            }
         }
 
         this.refresh = function () {
-            groupListCreated.reset();
+            //groupListCreated.reset();
             wizard.reset();
-            groupListInvited.reset();
+            //groupListInvited.reset();
             console.log("refreshed");
         }
     }
