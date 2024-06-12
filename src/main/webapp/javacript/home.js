@@ -424,6 +424,14 @@
                                         modal.style.display = "none";
                                     }
 
+                                    const cancelBtn = document.getElementById("cancelBtn");
+                                    cancelBtn.addEventListener("click", () => {
+                                        let checkboxes = document.querySelectorAll('input[name="selectedUsers"]');
+                                        checkboxes.forEach(checkbox => {
+                                            checkbox.checked = false;
+                                        });
+                                    });
+
                                 }
                             }
                         }
