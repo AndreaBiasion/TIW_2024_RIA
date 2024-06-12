@@ -1,5 +1,5 @@
 {
-    let groupListCreated, groupListInvited, groupDetails, groupListBodyCreated, groupListBodyInvited, anagList, anagListBody, anagListContainer;
+    let groupListCreated, groupListInvited, anagList, wizard, detailsList;
 
     let pageOrchestrator = new PageOrchestrator();
 
@@ -63,9 +63,10 @@
                 linkText = document.createTextNode("Dettagli");
                 anchor.appendChild(linkText);
                 anchor.href = "#";
+
                 anchor.addEventListener("click", function(event) {
                     event.preventDefault();
-                    showGroupDetails(group.id);  // Show group details in modal
+                    detailsList = new showGroupDetails(group.id); // Show group details in modal
                 });
                 linkcell.appendChild(anchor);
                 row.appendChild(linkcell);
@@ -234,10 +235,10 @@
 
     // Function to show group details in the modal
     function showGroupDetails(groupId) {
+        let errorMessage = document.getElementById("id_error_details");
         makeCall("GET", 'GetGroupDetails?id=' + groupId, null, function(req) {
             if (req.readyState === 4) {
                 let message = req.responseText;
-                let errorMessage = document.getElementById("id_error_details");
 
                 if (req.status === 200) {
                     let groupDetails = JSON.parse(req.responseText);
@@ -286,6 +287,10 @@
                 }
             }
         });
+
+        this.reset = function (){
+            errorMessage.textContent = "";
+        }
     }
 
     // Event listeners for drag and drop
@@ -338,6 +343,42 @@
         }
     }
 
+    function Wizard(wizardId) {
+        this.wizard = wizardId;
+
+        this.registerEvents = function (orchestrator) {
+            let form = this.wizard;
+            var valid = true;
+
+            console.log("sono vivo")
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                console.log("inviato")
+
+                if(form.checkValidity()){
+
+                    let min_part = document.getElementById("min_part").value;
+                    let max_part = document.getElementById("max_part").value;
+
+                    if(min_part > max_part) {
+                        console.log("errore, min > max");
+                        orchestrator.refresh();
+                    }
+
+                }
+
+
+            })
+
+        }
+
+        this.reset = function () {
+            this.wizard.reset();
+        }
+    }
+
 
     function PageOrchestrator() {
         this.start = function () {
@@ -359,47 +400,29 @@
 
             groupListInvited.show();
 
-            anagList = new UsersList(
-                document.getElementById("anagListContainer"),
-                document.getElementById("anagListBody")
-            );
+            wizard = new Wizard(document.getElementById("create_group_form"));
+            wizard.registerEvents(this);
 
-            anagList.show();
-
-            const modal = document.getElementById("myModal");
-            const span = document.getElementsByClassName("anag_close")[0];
-            const btn = document.getElementById("createGroupBtn");
-
-            btn.onclick = function() {
-                modal.style.display = "block";
-            }
-
-            span.onclick = function() {
-                modal.style.display = "none";
-            }
-
-            window.onclick = function(event) {
-                if (event.target === modal) {
-                    modal.style.display = "none";
-                }
-            }
 
             const detailModal = document.getElementById("myDetailModal");
             const detailSpan = document.getElementsByClassName("detail_close")[0];
 
             detailSpan.onclick = function() {
                 detailModal.style.display = "none";
+                detailsList.reset();
             }
 
             window.onclick = function(event) {
                 if (event.target == detailModal) {
                     detailModal.style.display = "none";
+                    detailsList.reset();
                 }
             }
         }
+
         this.refresh = function () {
-            anagList.reset();
             groupListCreated.reset();
+            wizard.reset();
             groupListInvited.reset();
             console.log("refreshed");
         }
