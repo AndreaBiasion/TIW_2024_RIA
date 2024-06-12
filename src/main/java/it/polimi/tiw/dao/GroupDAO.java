@@ -97,6 +97,33 @@ public class GroupDAO {
 
     }
 
+    public void removeUserFromGroup(int IDGroup, String username) throws SQLException {
+
+        String query = "DELETE FROM partecipazione WHERE idpart = ? and idgruppo = ?";
+        PreparedStatement preparedStatement = null;
+        int affectedRows = 0;
+
+        try {
+            preparedStatement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, username);
+            preparedStatement.setInt(2, IDGroup);
+
+            affectedRows = preparedStatement.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("Removing from group failed, no rows affected.");
+            }
+
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }   finally {
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+        }
+
+    }
+
     /**
      * Method to get the groups of a user
      * @param username

@@ -264,11 +264,13 @@
 
                         row.draggable = true;
                         row.setAttribute('data-username', user.username);
+                        row.setAttribute('id_group', group.id);
 
 
                         row.addEventListener('dragstart', function(event) {
-                            event.dataTransfer.setData('text/plain', this.getAttribute('data-username'));
+                            event.dataTransfer.setData('text/plain', JSON.stringify({username: this.getAttribute('data-username'), groupId: this.getAttribute('id_group')}));
                         });
+
 
 
                         detailsBody.appendChild(row);
@@ -303,10 +305,39 @@
         this.style.backgroundColor = 'transparent';
     });
 
-    function removeUserFromGroup(username) {
-        console.log("Rimuovi utente:", username);
+    function removeUserFromGroup(userData) {
+        let { username, groupId } = JSON.parse(userData);
+        console.log("Rimuovi utente:", username, "dal gruppo:", groupId);
+        let errorMessage = document.getElementById("id_error_details");
 
+        // Aggiungi la logica per rimuovere l'utente dal gruppo usando una chiamata al server
+        makeCall("POST", "RemoveUser?id=" + groupId + "&username=" + username, null,
+            function(req) {
+                if (req.readyState === 4) {
+                    if (req.status === 200) {
+                        console.log("Utente rimosso con successo");
+                        // Rimuovi la riga dalla tabella
+                        let detailsBody = document.getElementById("detailListBody");
+                        let rows = detailsBody.getElementsByTagName("tr");
+                        for (let i = 0; i < rows.length; i++) {
+                            if (rows[i].getAttribute('data-username') === username) {
+                                detailsBody.removeChild(rows[i]);
+                                break;
+                            }
+                        }
+                    } else {
+
+                        errorMessage.textContent = "Errore: hai raggiunto il minimo di partecipanti";
+                        console.error("Errore nella rimozione dell'utente:", req.responseText);
+                    }
+                }
+            });
+
+        this.reset = function () {
+            errorMessage.textContent = "";
+        }
     }
+
 
     function PageOrchestrator() {
         this.start = function () {
