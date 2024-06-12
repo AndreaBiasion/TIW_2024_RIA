@@ -18,9 +18,9 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-@WebServlet(name = "createGroupServlet", value = "/createGroup")
+@WebServlet(name = "checkGroup", value = "/CheckGroup")
 @MultipartConfig
-public class CreateGroup extends HttpServlet {
+public class CheckGroup extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private Connection connection = null;
@@ -30,7 +30,7 @@ public class CreateGroup extends HttpServlet {
     /**
      * Default constructor.
      */
-    public CreateGroup(){
+    public CheckGroup(){
         super();
     }
 
@@ -58,8 +58,11 @@ public class CreateGroup extends HttpServlet {
 
 
         if (title == null || title.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().println("Parametri mancanti");
             return;
         }
+
 
         int min_part;
         int max_part;
@@ -74,17 +77,18 @@ public class CreateGroup extends HttpServlet {
         int durata = Integer.parseInt(durataStr);
 
         if(durata <= 0) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().println("Errore: durata invalida");
             return;
         }
 
-        if (min_part > max_part) {
+        if (min_part > max_part || min_part <= 1) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().println("Errore: numero partecipanti invalido");
             return;
         }
 
-        if (min_part < 1) {
-            return;
-        }
-
+        response.setStatus(HttpServletResponse.SC_OK);
 
 
     }

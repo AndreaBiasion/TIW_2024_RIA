@@ -346,6 +346,8 @@
     function Wizard(wizardId) {
         this.wizard = wizardId;
 
+        let errorMessage = document.getElementById("errorMessage");
+
         this.registerEvents = function (orchestrator) {
             let form = this.wizard;
             var valid = true;
@@ -361,11 +363,60 @@
 
                     let min_part = document.getElementById("min_part").value;
                     let max_part = document.getElementById("max_part").value;
+                    let durata = document.getElementById("durata_att").value;
 
-                    if(min_part > max_part) {
-                        console.log("errore, min > max");
+
+                    if(min_part > max_part || min_part <= 1) {
+                        errorMessage.textContent = "Errore: numero partecipanti invalido";
                         orchestrator.refresh();
+                        return;
                     }
+
+                    if(durata <= 0) {
+                        errorMessage.textContent = "Errore: durata attivita' invalida";
+                        orchestrator.refresh();
+                        return;
+                    }
+
+                    errorMessage.textContent = "";
+                    console.log("valido")
+
+                    makeCall("POST", 'CheckGroup', form,
+                        function(req) {
+                            if (req.readyState === XMLHttpRequest.DONE) {
+                                let message = req.responseText;
+
+                                if(req.status === 200) {
+                                    anagList = new UsersList(
+                                        document.getElementById("anagListContainer"),
+                                        document.getElementById("anagListBody")
+                                    );
+
+
+                                    anagList.show();
+
+                                    const modal = document.getElementById("myModal");
+                                    const span = document.getElementsByClassName("anag_close")[0];
+
+
+                                    modal.style.display = "block";
+
+
+                                    span.onclick = function () {
+                                        modal.style.display = "none";
+                                    }
+
+                                    window.onclick = function (event) {
+                                        if (event.target === modal) {
+                                            modal.style.display = "none";
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    );
+
+
 
                 }
 
