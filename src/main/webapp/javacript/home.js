@@ -429,7 +429,12 @@
             })
 
             let anagForm = document.getElementById("anagListForm");
-            let errorCount = 0;
+            let errorCount= localStorage.getItem("errorCount");
+            if (errorCount === null) {
+                errorCount = 0;
+            } else {
+                errorCount = parseInt(errorCount);
+            }
             anagForm.addEventListener("submit", (e) => {
                 e.preventDefault();
 
@@ -440,12 +445,16 @@
                 if (selectedUsers.length < min_part || selectedUsers.length > max_part) {
                     document.getElementById("id_error_anag").textContent = "Errore: il numero di utenti selezionati non rispetta i vincoli";
                     errorCount++;
+                    localStorage.setItem("errorCount", errorCount);
                     console.log("errorCount", errorCount);
                 }
 
                 if(errorCount > 2) {
                     document.getElementById("myModal").style.display = "none";
                     document.getElementById("id_error_anag").textContent = "";
+                    errorCount = 0;
+                    localStorage.setItem("errorCount", errorCount);
+                    console.log("errorCount", errorCount);
                     orchestrator.refresh();
                 }
 
