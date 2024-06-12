@@ -364,12 +364,10 @@
             let form = this.wizard;
             var valid = true;
 
-            console.log("sono vivo")
 
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
 
-                console.log("inviato")
 
                 if(form.checkValidity()){
 
@@ -410,27 +408,27 @@
                                     const modal = document.getElementById("myModal");
                                     const span = document.getElementsByClassName("anag_close")[0];
 
-
                                     modal.style.display = "block";
-
 
                                     span.onclick = function () {
                                         modal.style.display = "none";
                                     }
 
-                                    window.onclick = function (event) {
-                                        if (event.target === modal) {
-                                            modal.style.display = "none";
-                                        }
-                                    }
                                 }
                             }
                         }
                     );
 
 
-
                 }
+
+
+            })
+
+            let anagForm = document.getElementById("anagListForm");
+            anagForm.addEventListener("submit", (e) => {
+                e.preventDefault();
+
 
 
             })
