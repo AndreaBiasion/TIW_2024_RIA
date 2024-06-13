@@ -477,7 +477,7 @@
                 let formData = new FormData();
                 selectedValues.forEach(value => formData.append("selectedUsers", value));
 
-                if (selectedValues.length <= inf) {
+                if (selectedValues.length < inf) {
                     let delta = inf - selectedValues.length;
                     document.getElementById("id_error_anag").textContent = "Troppi pochi utenti selezionati, aggiungerne almeno " + delta;
                     errorCount++;
@@ -504,7 +504,7 @@
                 }
 
 
-                if(selectedValues.length > inf && selectedValues.length <= sup) {
+                if(selectedValues.length >= inf && selectedValues.length <= sup) {
                     makeCall("POST", "CreateGroup?title=" + titolo + "&durata=" + durata + "&min_part=" + min_part + "&max_part=" + max_part+"&selectedUsers="+selectedValues, form,
                         function (req) {
                             if (req.readyState === XMLHttpRequest.DONE) {
