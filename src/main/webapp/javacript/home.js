@@ -558,7 +558,7 @@
 
         this.refresh = function () {
             groupListCreated.reset();
-            //groupListInvited.reset();
+            groupListInvited.reset();
             wizard.reset();
             console.log("refreshed");
         }
