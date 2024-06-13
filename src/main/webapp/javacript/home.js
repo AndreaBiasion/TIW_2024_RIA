@@ -425,6 +425,8 @@
                                         modal.style.display = "none";
                                     }
 
+                                    document.getElementById("id_error_anag").textContent = "Puoi invitare da " + min_part -1 + " a " + max_part - 1 + " utenti";
+
                                     const cancelBtn = document.getElementById("cancelBtn");
                                     cancelBtn.addEventListener("click", () => {
                                         let checkboxes = document.querySelectorAll('input[name="selectedUsers"]');
@@ -467,8 +469,17 @@
                 let formData = new FormData();
                 selectedValues.forEach(value => formData.append("selectedUsers", value));
 
-                if (selectedValues.length < min_part || selectedValues.length > max_part) {
-                    document.getElementById("id_error_anag").textContent = "Errore: il numero di utenti selezionati non rispetta i vincoli";
+                if (selectedValues.length < min_part) {
+                    let delta = min_part - selectedValues.length - 1;
+                    document.getElementById("id_error_anag").textContent = "Troppi pochi utenti selezionati, aggiungerne almeno " + delta;
+                    errorCount++;
+                    localStorage.setItem("errorCount", errorCount);
+                    console.log("errorCount", errorCount);
+                }
+
+                if (selectedValues.length > max_part) {
+                    let delta = selectedValues.length - max_part - 1;
+                    document.getElementById("id_error_anag").textContent = "Troppi utenti selezionati, eliminarne almeno " + delta;
                     errorCount++;
                     localStorage.setItem("errorCount", errorCount);
                     console.log("errorCount", errorCount);
