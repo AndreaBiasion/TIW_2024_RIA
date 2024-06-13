@@ -78,7 +78,7 @@
         }
 
         this.reset = function() {
-            this.groupCratedContainer.style.visibility = "hidden";
+            //this.groupCratedContainer.style.visibility = "hidden";
         }
     }
 
@@ -147,7 +147,7 @@
         }
 
         this.reset = function() {
-            this.groupInvitedContainer.style.visibility = "hidden";
+            //this.groupInvitedContainer.style.visibility = "hidden";
         }
     }
 
@@ -454,10 +454,19 @@
                 e.preventDefault();
 
 
-                let selectedUsers = document.querySelectorAll('input[name="selectedUsers"]:checked');
+                // Ottieni tutti gli input checkbox selezionati
+                let selectedCheckboxes = Array.from(document.querySelectorAll('input[name="selectedUsers"]:checked'));
 
+                // Estrai i valori associati alle checkbox selezionate
+                let selectedValues = selectedCheckboxes.map(checkbox => checkbox.value);
 
-                if (selectedUsers.length < min_part || selectedUsers.length > max_part) {
+                // Mostra i valori nel console
+                console.log(selectedValues);
+
+                let formData = new FormData();
+                selectedValues.forEach(value => formData.append("selectedUsers", value));
+
+                if (selectedValues.length < min_part || selectedValues.length > max_part) {
                     document.getElementById("id_error_anag").textContent = "Errore: il numero di utenti selezionati non rispetta i vincoli";
                     errorCount++;
                     localStorage.setItem("errorCount", errorCount);
@@ -473,15 +482,18 @@
                     orchestrator.refresh();
                 }
 
-                makeCall("POST", "CreateGroup?title="+titolo+"&durata="+durata+ "&min_part="+min_part+ "&max_part="+max_part, form,
-                    function(req) {
+
+                makeCall("POST", "CreateGroup?title=" + titolo + "&durata=" + durata + "&min_part=" + min_part + "&max_part=" + max_part+"&selectedUsers="+selectedValues, form,
+                    function (req) {
                         if (req.readyState === XMLHttpRequest.DONE) {
                             let message = req.responseText;
 
-                            if(req.status === 200) {
-                                console.log("Gruppo creato con successo");
+                            if (req.status === 200) {
+                                errorMessage.textContent = "Gruppo creato con successo";
+                                document.getElementById("myModal").style.display = "none";
                                 orchestrator.refresh();
                             } else {
+                                errorMessage.textContent = "Errore nella creazione del gruppo";
                                 console.error("Errore nella creazione del gruppo:", message);
                             }
                         }

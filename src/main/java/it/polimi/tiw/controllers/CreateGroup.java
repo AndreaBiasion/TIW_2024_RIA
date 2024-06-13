@@ -16,11 +16,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.awt.datatransfer.StringSelection;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -81,6 +83,7 @@ public class CreateGroup extends HttpServlet {
         if (isBadRequest){
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().println("parametri mancanti o scorretti");
+            return;
         }
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
@@ -96,35 +99,34 @@ public class CreateGroup extends HttpServlet {
         max_part--;
 
 
-        String[] selectedUsers = request.getParameterValues("selectedUsers");
-        List<String> usernames = new ArrayList<>();
-        int selectedCount = 0;
-        if (selectedUsers != null) {
-            selectedCount = selectedUsers.length;
-            for (String username : selectedUsers) {
-                usernames.add(username);
-            }
+        String[] selezione = request.getParameterValues("selectedUsers");
+
+        String selection = selezione[0];
+        String[] selections = selection.split(",");
+
+
+        List<String> usernames = new ArrayList<>(Arrays.asList(selections));
+
+        if (usernames.size() < min_part) {
+            request.getSession().setAttribute("selectedUsers", usernames);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
 
-         if (selectedCount < min_part) {
-                request.getSession().setAttribute("selectedUsers", usernames);
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            }
-            if (selectedCount > max_part) {
-                request.getSession().setAttribute("selectedUsers", usernames);
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            }
+        if (usernames.size() > max_part) {
+            request.getSession().setAttribute("selectedUsers", usernames);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
 
-            if (selectedCount >= min_part && selectedCount <= max_part) {
-                GroupDAO groupDAO = new GroupDAO(connection);
-                try {
-                    usernames.add(user.getUsername());
-                    groupDAO.createGroup(usernames, g, user.getUsername());
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-                return;
-            }
+        GroupDAO groupDAO = new GroupDAO(connection);
+        try {
+            usernames.add(user.getUsername());
+            groupDAO.createGroup(usernames, g, user.getUsername());
+            response.setStatus(HttpServletResponse.SC_OK);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
