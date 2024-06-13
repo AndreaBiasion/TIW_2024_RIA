@@ -136,7 +136,7 @@
                 anchor.href = "#";
                 anchor.addEventListener("click", function(event) {
                     event.preventDefault();
-                    showGroupDetails(group.id, _groupListBodyInvited);  // Show group details in modal
+                    detailsList = new showGroupDetails(group.id, _groupListBodyInvited);  // Show group details in modal
                 });
                 linkcell.appendChild(anchor);
                 row.appendChild(linkcell);
@@ -295,6 +295,7 @@
 
         this.reset = function (){
             errorMessage.textContent = "";
+            document.getElementById("trashBin").style.display = "none";
         }
     }
 
@@ -345,6 +346,7 @@
                                 break;
                             }
                         }
+                        pageOrchestrator.refresh();
                     } else {
                         errorMessage.textContent = "Errore: hai raggiunto il minimo di partecipanti";
                         console.error("Errore nella rimozione dell'utente:", req.responseText);
@@ -571,7 +573,7 @@
             }
 
             window.onclick = function(event) {
-                if (event.target == detailModal) {
+                if (event.target === detailModal) {
                     detailModal.style.display = "none";
                     detailsList.reset();
                 }
