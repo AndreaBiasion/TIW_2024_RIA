@@ -496,6 +496,7 @@
                 if(errorCount > 2) {
                     document.getElementById("myModal").style.display = "none";
                     document.getElementById("id_error_anag").textContent = "";
+                    errorMessage.textContent = "Errore nella creazione del gruppo";
                     errorCount = 0;
                     localStorage.setItem("errorCount", errorCount);
                     console.log("errorCount", errorCount);
