@@ -78,7 +78,8 @@
         }
 
         this.reset = function() {
-            //this.groupCratedContainer.style.visibility = "hidden";
+            // showing the group
+            this.show();
         }
     }
 
@@ -147,7 +148,7 @@
         }
 
         this.reset = function() {
-            //this.groupInvitedContainer.style.visibility = "hidden";
+            this.show();
         }
     }
 
@@ -553,17 +554,12 @@
                     detailsList.reset();
                 }
             }
-
-            if (sessionStorage.getItem("detailModalOpen") === "true") {
-                let groupId = sessionStorage.getItem("currentGroupId");
-                showGroupDetails(groupId, document.getElementById("groupListBodyCreated"));
-            }
         }
 
         this.refresh = function () {
-            //groupListCreated.reset();
-            wizard.reset();
+            groupListCreated.reset();
             //groupListInvited.reset();
+            wizard.reset();
             console.log("refreshed");
         }
     }
