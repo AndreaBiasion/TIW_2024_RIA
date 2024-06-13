@@ -468,19 +468,25 @@
                 // Mostra i valori nel console
                 console.log(selectedValues);
 
+                console.log("min: ", min_part)
+                console.log("max: ", max_part)
+
+                let inf = min_part - 1;
+                let sup = max_part - 1;
+
                 let formData = new FormData();
                 selectedValues.forEach(value => formData.append("selectedUsers", value));
 
-                if (selectedValues.length < min_part) {
-                    let delta = min_part - selectedValues.length - 1;
+                if (selectedValues.length <= inf) {
+                    let delta = inf - selectedValues.length;
                     document.getElementById("id_error_anag").textContent = "Troppi pochi utenti selezionati, aggiungerne almeno " + delta;
                     errorCount++;
                     localStorage.setItem("errorCount", errorCount);
                     console.log("errorCount", errorCount);
                 }
 
-                if (selectedValues.length > max_part) {
-                    let delta = selectedValues.length - max_part - 1;
+                if (selectedValues.length > sup) {
+                    let delta = selectedValues.length - sup;
                     document.getElementById("id_error_anag").textContent = "Troppi utenti selezionati, eliminarne almeno " + delta;
                     errorCount++;
                     localStorage.setItem("errorCount", errorCount);
@@ -497,22 +503,24 @@
                 }
 
 
-                makeCall("POST", "CreateGroup?title=" + titolo + "&durata=" + durata + "&min_part=" + min_part + "&max_part=" + max_part+"&selectedUsers="+selectedValues, form,
-                    function (req) {
-                        if (req.readyState === XMLHttpRequest.DONE) {
-                            let message = req.responseText;
+                if(selectedValues.length > inf && selectedValues.length <= sup) {
+                    makeCall("POST", "CreateGroup?title=" + titolo + "&durata=" + durata + "&min_part=" + min_part + "&max_part=" + max_part+"&selectedUsers="+selectedValues, form,
+                        function (req) {
+                            if (req.readyState === XMLHttpRequest.DONE) {
+                                let message = req.responseText;
 
-                            if (req.status === 200) {
-                                errorMessage.textContent = "Gruppo creato con successo";
-                                document.getElementById("myModal").style.display = "none";
-                                orchestrator.refresh();
-                            } else {
-                                errorMessage.textContent = "Errore nella creazione del gruppo";
-                                console.error("Errore nella creazione del gruppo:", message);
+                                if (req.status === 200) {
+                                    errorMessage.textContent = "Gruppo creato con successo";
+                                    document.getElementById("myModal").style.display = "none";
+                                    orchestrator.refresh();
+                                } else {
+                                    errorMessage.textContent = "Errore nella creazione del gruppo";
+                                    console.error("Errore nella creazione del gruppo:", message);
+                                }
                             }
                         }
-                    }
-                );
+                    );
+                }
 
             });
 
