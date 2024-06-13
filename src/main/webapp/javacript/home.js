@@ -425,8 +425,8 @@
                                         modal.style.display = "none";
                                     }
 
-                                    let inf = min_part-1;
-                                    let sup = min_part+1;
+                                    let inf = min_part - 1;
+                                    let sup = max_part - 1;
                                     document.getElementById("id_error_anag").textContent = "Puoi invitare da " + inf + " a " + sup + " utenti";
 
                                     const cancelBtn = document.getElementById("cancelBtn");
