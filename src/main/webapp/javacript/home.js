@@ -425,7 +425,9 @@
                                         modal.style.display = "none";
                                     }
 
-                                    document.getElementById("id_error_anag").textContent = "Puoi invitare da " + min_part -1 + " a " + max_part - 1 + " utenti";
+                                    let inf = min_part-1;
+                                    let sup = min_part+1;
+                                    document.getElementById("id_error_anag").textContent = "Puoi invitare da " + inf + " a " + sup + " utenti";
 
                                     const cancelBtn = document.getElementById("cancelBtn");
                                     cancelBtn.addEventListener("click", () => {
