@@ -12,6 +12,15 @@ function passwordMatch() {
     return false;
 }
 
+// Funzione per validare l'email
+function isValidEmail() {
+
+    let email = document.getElementById("email").value;
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+}
+
 (function() { // avoid variables ending up in the global scope
 
     document.getElementById("registerForm").addEventListener('submit', (e) => {
@@ -24,6 +33,12 @@ function passwordMatch() {
         if (form.checkValidity()) {
             if (!passwordMatch()) {
                 document.getElementById("errorMessage").textContent = "Le password non corrispondono (o sono mancanti)!";
+                document.getElementById("errorMessage").hidden = false;
+                return false;
+            }
+
+            if (!isValidEmail()) {
+                document.getElementById("errorMessage").textContent = "Email non valida";
                 document.getElementById("errorMessage").hidden = false;
                 return false;
             }
