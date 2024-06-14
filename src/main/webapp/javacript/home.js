@@ -539,7 +539,10 @@
 
     // adding listener to logout button
     document.getElementById("logout_btn").addEventListener("click",
-        () => sessionStorage.removeItem("user")
+        () => {
+            sessionStorage.removeItem("user")
+            console.log("Current user: ", sessionStorage.getItem("user"));
+        }
     )
 
 
