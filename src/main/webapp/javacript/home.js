@@ -9,6 +9,8 @@
         } else {
             pageOrchestrator.start();
             pageOrchestrator.refresh();
+
+
         }
     }, false);
 
@@ -535,6 +537,10 @@
         }
     }
 
+    // adding listener to logout button
+    document.getElementById("logout_btn").addEventListener("click",
+        () => sessionStorage.removeItem("user")
+    )
 
 
     function PageOrchestrator() {
@@ -578,6 +584,8 @@
                     detailsList.reset();
                 }
             }
+
+
         }
 
         this.refresh = function () {

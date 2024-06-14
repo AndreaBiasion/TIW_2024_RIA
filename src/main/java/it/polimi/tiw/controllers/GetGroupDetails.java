@@ -91,10 +91,10 @@ public class GetGroupDetails extends HttpServlet {
                     .anyMatch(username -> username.equals(user.getUsername()));
 
 
-            // If the specified group isn't found, redirects to the homepage
+
             if (group == null || !check) {
-                String path = request.getContextPath() + "/goToHome";
-                response.sendRedirect(path);
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().println("Errore: gruppo non riconosciuto o inesistente");
                 return;
             }
 
