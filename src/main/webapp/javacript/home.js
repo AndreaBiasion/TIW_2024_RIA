@@ -15,9 +15,9 @@
         }
     }, false);
     //Mostra la lista dei gruppi creati dall'utente
-    function GroupListCreated(_groupCratedContainer, _groupListBodyCreated) {
+    function GroupListCreated(_groupCreatedContainer, _groupListBodyCreated) {
         this.groupListBodyCreated = _groupListBodyCreated;
-        this.groupCratedContainer = _groupCratedContainer;
+        this.groupCreatedContainer = _groupCreatedContainer;
 
         this.show = function () {
             let self = this;
@@ -32,10 +32,11 @@
 
                             if(groups.length === 0) {
                                 errorMessage.textContent = "Nessun gruppo creato";
-                                this.groupInvitedContainer.style.visibility = "hidden";
+                                this.groupCreatedContainer.style.visibility = "hidden";
                                 return;
                             }
 
+                            errorMessage.textContent = "";
                             self.update(groups);
                         } else if(req.status === 403) {
                             window.location.href = req.getResponseHeader("Location");
@@ -77,7 +78,7 @@
                 // Aggiungere la riga al corpo della tabella
                 self.groupListBodyCreated.appendChild(row);
             });
-            this.groupCratedContainer.style.visibility = "visible";
+            this.groupCreatedContainer.style.visibility = "visible";
         }
 
         this.reset = function() {
