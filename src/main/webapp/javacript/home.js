@@ -106,7 +106,7 @@
                                 this.groupInvitedContainer.style.visibility = "hidden";
                                 return;
                             }
-                            //
+                            //aggiorno la lista
                             self.update(groups);
                         } else if(req.status === 403) {
                             window.location.href = req.getResponseHeader("Location");
@@ -304,6 +304,7 @@
         removeUserFromGroup(username);
         this.style.backgroundColor = 'transparent';
     });
+
     //Rimuovi l'utente dal gruppo
     function removeUserFromGroup(userData) {
         let { username, groupId } = JSON.parse(userData);
@@ -314,6 +315,8 @@
             errorMessage.textContent = "Non puoi eliminare te stesso";
             return;
         }
+
+
         //Logica per rimuovere l'utente dal gruppo usando una chiamata al server
         makeCall("POST", "RemoveUser?id=" + groupId + "&username=" + username, null,
             function(req) {
@@ -331,7 +334,7 @@
                         }
                         pageOrchestrator.refresh();
                     } else {
-                        errorMessage.textContent = "Errore: hai raggiunto il minimo di partecipanti";
+                        errorMessage.textContent = req.responseText;
                     }
                 }
             });

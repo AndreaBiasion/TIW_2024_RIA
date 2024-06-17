@@ -243,6 +243,7 @@ public class GroupDAO {
             }
             resultSet.next();
             group.setId(resultSet.getInt("id"));
+            group.setUsername_creatore(resultSet.getString("username_creatore"));
             group.setTitle(resultSet.getString("titolo"));
             group.setActivity_duration(resultSet.getInt("durata_att"));
             group.setMin_parts(resultSet.getInt("min_part"));

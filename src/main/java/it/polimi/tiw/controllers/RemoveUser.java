@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 @WebServlet(name = "removeUser", value = "/RemoveUser")
 public class RemoveUser extends HttpServlet {
@@ -60,8 +61,18 @@ public class RemoveUser extends HttpServlet {
         HttpSession session = request.getSession();
 
         String username = request.getParameter("username");
-        int id_group = Integer.parseInt(request.getParameter("id"));
+        int id_group;
 
+        try {
+            id_group = Integer.parseInt(request.getParameter("id"));
+        } catch (NullPointerException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().println("Errore: gruppo non riconosciuto");
+            return;
+        }
+
+
+        User user = (User) session.getAttribute("user");
         GroupDAO groupDAO = new GroupDAO(connection);
 
         try {
@@ -69,11 +80,20 @@ public class RemoveUser extends HttpServlet {
 
             UserDAO userDAO = new UserDAO(connection);
 
-            List<User> userList = userDAO.getUsersFromGroup(id_group);
+            List<User> usersList = userDAO.getUsersFromGroup(id_group);
 
-            if(userList.size() - 1 < g.getMin_parts()){
+            System.out.println("Username corrente: " + user.getUsername());
+
+            if(g == null || !Objects.equals(g.getUsername_creatore(), user.getUsername())) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getWriter().println("Errore: Sei sotto la soglia minima");
+                response.getWriter().println("Errore: non sei il creatore");
+                return;
+            }
+
+
+            if(usersList.size() - 1 < g.getMin_parts()){
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().println("Errore: minimo di partecipanti raggiunto");
                 return;
             }
 
@@ -84,6 +104,8 @@ public class RemoveUser extends HttpServlet {
             response.getWriter().println("SQL error: impossibile ricavare i gruppi dell'utente");
             return;
         }
+
+        response.getWriter().println("Utente rimosso con successo");
 
     }
 

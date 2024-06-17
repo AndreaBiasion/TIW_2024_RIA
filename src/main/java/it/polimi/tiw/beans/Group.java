@@ -10,6 +10,8 @@ public class Group {
     private int max_parts;
     private String title;
     private Date date_creation;
+    private String username_creatore;
+
     /**
      *
      * @return the id of the group
@@ -93,5 +95,13 @@ public class Group {
      */
     public void setDate_creation(Date date_creation) {
         this.date_creation = date_creation;
+    }
+
+    public String getUsername_creatore() {
+        return username_creatore;
+    }
+
+    public void setUsername_creatore(String username_creatore) {
+        this.username_creatore = username_creatore;
     }
 }
