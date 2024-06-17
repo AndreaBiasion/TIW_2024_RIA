@@ -68,7 +68,8 @@ public class CheckGroup extends HttpServlet {
             max_part = Integer.parseInt(maxPartStr);
             durata = Integer.parseInt(durataStr);
         } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Errore: parametri non validi");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().println("Parametri non validi");
             return;
         }
 

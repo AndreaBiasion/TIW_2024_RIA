@@ -109,8 +109,6 @@ public class CheckRegister extends HttpServlet {
 
         response.setStatus(HttpServletResponse.SC_OK);
 
-
-
     }
 
     /**
