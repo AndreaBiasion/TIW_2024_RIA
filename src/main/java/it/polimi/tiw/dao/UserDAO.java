@@ -149,7 +149,7 @@ public class UserDAO {
      */
     public List<User> getUsersFromGroup(int idgroup) throws SQLException {
         List<User> users = new ArrayList<>();
-        String query = "select username,nome,cognome from partecipazione join utente on partecipazione.idpart = utente.username where idgruppo = ?";
+        String query = "select username,nome,cognome from partecipazione join utente on partecipazione.idpart = utente.username where idgruppo = ? order by cognome";
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
