@@ -43,11 +43,7 @@ public class CheckGroup extends HttpServlet {
         connection = ConnectionManager.getConnection(getServletContext());
     }
 
-    /**
-     * Handles HTTP POST requests for registration.
-     * @throws ServletException if an error occurs while processing the request.
-     * @throws IOException      if an I/O error occurs while handling the request.
-     */
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 

@@ -52,6 +52,7 @@ public class CreateGroup extends HttpServlet {
     public void init() throws ServletException {
         connection = ConnectionManager.getConnection(getServletContext());
     }
+
     /**
      * Handles POST requests for selecting users to invite to a group.
      * Validates the number of selected users and processes the group creation.

@@ -45,15 +45,7 @@ public class GetGroupDetails extends HttpServlet {
         connection = ConnectionManager.getConnection(getServletContext());
     }
 
-    /**
-     * Handles POST requests to validate user login credentials.
-     * If credentials are valid, redirects to the home page. Otherwise, reloads the login page with an error message.
-     *
-     * @param request  the HttpServletRequest object that contains the request the client has made to the servlet
-     * @param response the HttpServletResponse object that contains the response the servlet sends to the client
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an input or output error is detected when the servlet handles the POST request
-     */
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();

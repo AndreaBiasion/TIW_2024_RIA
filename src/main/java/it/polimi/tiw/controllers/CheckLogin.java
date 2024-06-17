@@ -50,7 +50,7 @@ public class CheckLogin extends HttpServlet {
 
     /**
      * Handles POST requests to validate user login credentials.
-     * If credentials are valid, redirects to the home page. Otherwise, reloads the login page with an error message.
+     * If credentials are valid, then STATUS_OK. Otherwise, reloads the login page with an error message.
      *
      * @param request  the HttpServletRequest object that contains the request the client has made to the servlet
      * @param response the HttpServletResponse object that contains the response the servlet sends to the client
