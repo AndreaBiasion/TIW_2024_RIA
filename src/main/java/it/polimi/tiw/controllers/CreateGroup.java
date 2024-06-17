@@ -70,24 +70,26 @@ public class CreateGroup extends HttpServlet {
         Integer max_part = null;
         String title = null;
 
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+
         try {
             title = request.getParameter("title");
             durata = Integer.parseInt(request.getParameter("durata"));
             min_part = Integer.parseInt(request.getParameter("min_part"));
             max_part = Integer.parseInt(request.getParameter("max_part"));
-
-            isBadRequest = title.isEmpty() || durata <= 0 || min_part <= 1 || max_part < min_part;
         } catch (NumberFormatException | NullPointerException e) {
-            isBadRequest = true;
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Errore: parametri non validi");
+            return;
         }
+
+        isBadRequest = title.isEmpty() || title == null || durata <= 0 || min_part <= 1 || max_part < min_part;
 
         if (isBadRequest){
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().println("parametri mancanti o scorretti");
             return;
         }
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
 
 
         Group g = new Group();
@@ -101,12 +103,10 @@ public class CreateGroup extends HttpServlet {
         min_part--;
         max_part--;
 
-
         String[] selezione = request.getParameterValues("selectedUsers");
 
         String selection = selezione[0];
         String[] selections = selection.split(",");
-
 
         List<String> usernames = new ArrayList<>(Arrays.asList(selections));
 

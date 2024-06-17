@@ -379,7 +379,6 @@
                     }
 
                     errorMessage.textContent = "";
-                    console.log("valido")
 
                     makeCall("POST", 'CheckGroup', form,
                         function(req) {
@@ -483,7 +482,7 @@
                                     document.getElementById("myModal").style.display = "none";
                                     orchestrator.refresh();
                                 } else {
-                                    errorMessage.textContent = "Errore nella creazione del gruppo";
+                                    errorMessage.textContent = message;
                                     console.error("Errore nella creazione del gruppo:", message);
                                 }
                             }
