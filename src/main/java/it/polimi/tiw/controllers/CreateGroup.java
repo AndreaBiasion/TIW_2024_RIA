@@ -69,6 +69,7 @@ public class CreateGroup extends HttpServlet {
         Integer min_part = null;
         Integer max_part = null;
         String title = null;
+        Integer errorCount = null;
 
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
@@ -78,8 +79,10 @@ public class CreateGroup extends HttpServlet {
             durata = Integer.parseInt(request.getParameter("durata"));
             min_part = Integer.parseInt(request.getParameter("min_part"));
             max_part = Integer.parseInt(request.getParameter("max_part"));
+            errorCount = Integer.parseInt(request.getParameter("errorCount"));
         } catch (NumberFormatException | NullPointerException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Errore: parametri non validi");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().println("parametri scorretti");
             return;
         }
 
@@ -91,6 +94,11 @@ public class CreateGroup extends HttpServlet {
             return;
         }
 
+        if(errorCount > 2){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().println("Troppi errori");
+            return;
+        }
 
         Group g = new Group();
         g.setUsername_creatore(user.getUsername());

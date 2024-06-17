@@ -472,19 +472,20 @@
                 }
 
                 if(selectedValues.length >= inf && selectedValues.length <= sup) {
-                    makeCall("POST", "CreateGroup?title=" + titolo + "&durata=" + durata + "&min_part=" + min_part + "&max_part=" + max_part+"&selectedUsers="+selectedValues, form,
+                    makeCall("POST", "CreateGroup?title=" + titolo + "&durata=" + durata + "&min_part=" + min_part + "&max_part=" + max_part+"&selectedUsers="+selectedValues + "&errorCount="+errorCount, form,
                         function (req) {
                             if (req.readyState === XMLHttpRequest.DONE) {
                                 let message = req.responseText;
 
                                 if (req.status === 200) {
                                     errorMessage.textContent = "Gruppo creato con successo";
-                                    document.getElementById("myModal").style.display = "none";
+                                    errorCount = 0;
                                     orchestrator.refresh();
                                 } else {
                                     errorMessage.textContent = message;
                                     console.error("Errore nella creazione del gruppo:", message);
                                 }
+                                document.getElementById("myModal").style.display = "none";
                             }
                         }
                     );
