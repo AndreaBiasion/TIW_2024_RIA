@@ -42,7 +42,19 @@ public class RemoveUser extends HttpServlet {
         connection = ConnectionManager.getConnection(getServletContext());
     }
 
-
+    /**
+     * Handles POST requests for removing a user from a group.
+     * @param request   an {@link HttpServletRequest} object that
+     *                  contains the request the client has made
+     *                  of the servlet
+     *
+     * @param response  an {@link HttpServletResponse} object that
+     *                  contains the response the servlet sends
+     *                  to the client
+     *
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
@@ -50,16 +62,9 @@ public class RemoveUser extends HttpServlet {
         String username = request.getParameter("username");
         int id_group = Integer.parseInt(request.getParameter("id"));
 
-
-        System.out.println("Id gruppo: " + id_group);
-        System.out.println("Username: " + username);
-
-
         GroupDAO groupDAO = new GroupDAO(connection);
 
-
         try {
-
             Group g = groupDAO.getGroupById(id_group);
 
             UserDAO userDAO = new UserDAO(connection);

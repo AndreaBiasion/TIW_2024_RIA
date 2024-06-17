@@ -3,6 +3,7 @@
 
     let pageOrchestrator = new PageOrchestrator();
 
+    //Evento: caricamento della home page
     window.addEventListener("load", () => {
         if(sessionStorage.getItem("user") == null) {
             window.location.hash = "login.html";
@@ -13,7 +14,7 @@
 
         }
     }, false);
-
+    //Mostra la lista dei gruppi creati dall'utente
     function GroupListCreated(_groupCratedContainer, _groupListBodyCreated) {
         this.groupListBodyCreated = _groupListBodyCreated;
         this.groupCratedContainer = _groupCratedContainer;
@@ -25,7 +26,7 @@
                     if (req.readyState === 4) {
                         let message = req.responseText;
                         let errorMessage = document.getElementById("id_error_created");
-
+                        //Il server ha risposto correttamente
                         if(req.status === 200) {
                             let groups = JSON.parse(req.responseText);
 
@@ -45,7 +46,7 @@
                     }
                 })
         }
-
+        //Aggiorna la lista dei gruppi creati dall'utente
         this.update = function (groups) {
             this.groupListBodyCreated.innerHTML = "";
             let self = this;
@@ -68,7 +69,7 @@
 
                 anchor.addEventListener("click", function(event) {
                     event.preventDefault();
-                    detailsList = new showGroupDetails(group.id, _groupListBodyCreated); // Show group details in modal
+                    detailsList = new showGroupDetails(group.id, _groupListBodyCreated); // Mostra i dettagli del gruppo in un modal
                 });
                 linkcell.appendChild(anchor);
                 row.appendChild(linkcell);
@@ -80,11 +81,11 @@
         }
 
         this.reset = function() {
-            // showing the group
+            // Mostro i gruppi creati
             this.show();
         }
     }
-
+    //Mostra la lista dei gruppi in cui l'utente è invitato
     function GroupListInvited(_groupInvitedContainer, _groupListBodyInvited) {
         this.groupListBodyInvited = _groupListBodyInvited;
         this.groupInvitedContainer = _groupInvitedContainer;
@@ -96,7 +97,7 @@
                     if (req.readyState === 4) {
                         let message = req.responseText;
                         let errorMessage = document.getElementById("id_error_invited");
-
+                        //Il server ha risposto correttamente
                         if(req.status === 200) {
                             let groups = JSON.parse(req.responseText);
 
@@ -105,7 +106,7 @@
                                 this.groupInvitedContainer.style.visibility = "hidden";
                                 return;
                             }
-
+                            //
                             self.update(groups);
                         } else if(req.status === 403) {
                             window.location.href = req.getResponseHeader("Location");
@@ -116,7 +117,7 @@
                     }
                 })
         }
-
+        //Aggiorna la lista dei gruppi in cui l'utente è invitato
         this.update = function (groups) {
             this.groupListBodyInvited.innerHTML = "";
             let self = this;
@@ -124,12 +125,10 @@
 
             groups.forEach(function (group) {
                 row = document.createElement("tr");
-
                 // Creare la cella del titolo
                 titlecell = document.createElement("td");
                 titlecell.textContent = group.title;
                 row.appendChild(titlecell);
-
                 // Creare la cella del link
                 linkcell = document.createElement("td");
                 anchor = document.createElement("a");
@@ -142,7 +141,6 @@
                 });
                 linkcell.appendChild(anchor);
                 row.appendChild(linkcell);
-
                 // Aggiungere la riga al corpo della tabella
                 self.groupListBodyInvited.appendChild(row);
             });
@@ -150,10 +148,11 @@
         }
 
         this.reset = function() {
+            // Mostra i gruppi in cui l'utente è invitato
             this.show();
         }
     }
-
+    //Mostra la lista degli utenti
     function UsersList(_anagListContainer, _anagListBody) {
         this.anagListBody = _anagListBody;
         this.anagListContainer = _anagListContainer;
@@ -174,9 +173,7 @@
                                 this.anagListContainer.style.visibility = "hidden";
                                 return;
                             }
-
-                            console.log("ci sono utenti");
-
+                            //Aggiorna la lista degli utenti
                             self.update(users);
                         } else if (req.status === 403) {
                             window.location.href = req.getResponseHeader("Location");
@@ -187,7 +184,7 @@
                     }
                 })
         }
-
+        //Aggiorna la lista degli utenti
         this.update = function (users, selectedUsers) {
             this.anagListBody.innerHTML = "";
             let self = this;
@@ -195,10 +192,8 @@
 
             users.forEach(function (user) {
                 row = document.createElement("tr");
-
                 // Creare la cella del contenuto
                 cell = document.createElement("td");
-
                 // Creare l'input checkbox
                 checkbox = document.createElement("input");
                 checkbox.type = "checkbox";
@@ -206,25 +201,20 @@
                 checkbox.name = "selectedUsers";
                 checkbox.value = user.username;
                 checkbox.id = "flexCheckDefault" + user.username;
-
                 // Impostare l'attributo checked se l'utente è selezionato
                 if (selectedUsers && selectedUsers.includes(user.username)) {
                     checkbox.checked = true;
                 }
-
                 // Creare l'etichetta per il checkbox
                 label = document.createElement("label");
                 label.className = "form-check-label";
                 label.htmlFor = checkbox.id;
                 label.textContent = user.name + ' ' + user.surname;
-
                 // Aggiungere l'input e l'etichetta alla cella
                 cell.appendChild(checkbox);
                 cell.appendChild(label);
-
                 // Aggiungere la cella alla riga
                 row.appendChild(cell);
-
                 // Aggiungere la riga al corpo della tabella
                 self.anagListBody.appendChild(row);
             });
@@ -236,21 +226,18 @@
         }
     }
 
-    // Function to show group details in the modal
+    //Funzione per mostrare i dettagli del gruppo
     function showGroupDetails(groupId, body) {
         let errorMessage = document.getElementById("id_error_details");
         makeCall("GET", 'GetGroupDetails?id=' + groupId, null, function(req) {
             if (req.readyState === 4) {
                 let message = req.responseText;
-
+                //Il server ha risposto correttamente
                 if (req.status === 200) {
                     let groupDetails = JSON.parse(req.responseText);
                     let group = groupDetails.group;
                     let users = groupDetails.users;
-
-
-
-                    // Fill the modal with group details
+                    //Aggiorna i dettagli del gruppo
                     document.getElementById("group_name").textContent = group.title;
                     document.getElementById("group_creation_date").textContent = "Creato il: " + group.date_creation;
                     document.getElementById("group_duration").textContent = "Durata attivita': " + group.activity_duration;
@@ -265,7 +252,7 @@
                         let surnameCell = document.createElement("td");
                         surnameCell.textContent = user.surname;
                         row.appendChild(surnameCell);
-
+                        //Se sono il creatore del gruppo, posso rimuovere gli utenti
                         if(body === document.getElementById("groupListBodyCreated")) {
                             row.draggable = true;
                             row.setAttribute('data-username', user.username);
@@ -317,28 +304,22 @@
         removeUserFromGroup(username);
         this.style.backgroundColor = 'transparent';
     });
-
+    //Rimuovi l'utente dal gruppo
     function removeUserFromGroup(userData) {
         let { username, groupId } = JSON.parse(userData);
-        console.log("Rimuovi utente:", username, "dal gruppo:", groupId);
         let errorMessage = document.getElementById("id_error_details");
-
-
         let currentUser = sessionStorage.getItem("user").trim();
-
 
         if(username.trim() === currentUser) {
             errorMessage.textContent = "Non puoi eliminare te stesso";
             return;
         }
-
-        // Aggiungi la logica per rimuovere l'utente dal gruppo usando una chiamata al server
+        //Logica per rimuovere l'utente dal gruppo usando una chiamata al server
         makeCall("POST", "RemoveUser?id=" + groupId + "&username=" + username, null,
             function(req) {
                 if (req.readyState === 4) {
                     if (req.status === 200) {
                         errorMessage.textContent = "Utente rimosso con successo";
-                        console.log("Utente rimosso con successo");
                         // Rimuovi la riga dalla tabella
                         let detailsBody = document.getElementById("detailListBody");
                         let rows = detailsBody.getElementsByTagName("tr");
@@ -351,7 +332,6 @@
                         pageOrchestrator.refresh();
                     } else {
                         errorMessage.textContent = "Errore: hai raggiunto il minimo di partecipanti";
-                        console.error("Errore nella rimozione dell'utente:", req.responseText);
                     }
                 }
             });
@@ -360,34 +340,27 @@
             errorMessage.textContent = "";
         }
     }
-
+    //Funzione per creare un gruppo
     function Wizard(wizardId) {
         this.wizard = wizardId;
 
         let errorMessage = document.getElementById("errorMessage");
 
-
         this.registerEvents = function (orchestrator) {
             let form = this.wizard;
-            var valid = true;
-
             let titolo;
             let durata;
             let min_part;
             let max_part;
-
-
+            //Evento: submit del form
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
 
-
                 if(form.checkValidity()){
-
                     titolo = document.getElementById("title").value;
                     min_part = document.getElementById("min_part").value;
                     max_part = document.getElementById("max_part").value;
                     durata = document.getElementById("durata_att").value;
-
 
                     if(min_part > max_part || min_part <= 1) {
                         errorMessage.textContent = "Errore: numero partecipanti invalido";
@@ -415,9 +388,7 @@
                                         document.getElementById("anagListBody")
                                     );
 
-
                                     anagList.show();
-
 
                                     const modal = document.getElementById("myModal");
                                     const span = document.getElementsByClassName("anag_close")[0];
@@ -428,11 +399,16 @@
                                     span.onclick = function () {
                                         modal.style.display = "none";
                                     }
-
+                                    //Escludo il creatore
                                     let inf = min_part - 1;
                                     let sup = max_part - 1;
-                                    document.getElementById("id_error_anag").textContent = "Puoi invitare da " + inf + " a " + sup + " utenti";
 
+                                    if(inf === sup) {
+                                        document.getElementById("id_error_anag").textContent = "Puoi invitare " + inf + " utenti";
+                                    }else {
+                                        document.getElementById("id_error_anag").textContent = "Puoi invitare da " + inf + " a " + sup + " utenti";
+                                    }
+                                    //Evento: click sul bottone di cancella
                                     const cancelBtn = document.getElementById("cancelBtn");
                                     cancelBtn.addEventListener("click", () => {
                                         let checkboxes = document.querySelectorAll('input[name="selectedUsers"]');
@@ -440,40 +416,28 @@
                                             checkbox.checked = false;
                                         });
                                     });
-
                                 }
                             }
                         }
                     );
-
-
                 }
-
-
             })
 
             let anagForm = document.getElementById("anagListForm");
             let errorCount= localStorage.getItem("errorCount");
+
             if (errorCount === null) {
                 errorCount = 0;
             } else {
                 errorCount = parseInt(errorCount);
             }
+
             anagForm.addEventListener("submit", (e) => {
                 e.preventDefault();
-
-
                 // Ottieni tutti gli input checkbox selezionati
                 let selectedCheckboxes = Array.from(document.querySelectorAll('input[name="selectedUsers"]:checked'));
-
                 // Estrai i valori associati alle checkbox selezionate
                 let selectedValues = selectedCheckboxes.map(checkbox => checkbox.value);
-
-                // Mostra i valori nel console
-                console.log(selectedValues);
-
-                console.log("min: ", min_part)
-                console.log("max: ", max_part)
 
                 let inf = min_part - 1;
                 let sup = max_part - 1;
@@ -486,7 +450,6 @@
                     document.getElementById("id_error_anag").textContent = "Troppi pochi utenti selezionati, aggiungerne almeno " + delta;
                     errorCount++;
                     localStorage.setItem("errorCount", errorCount);
-                    console.log("errorCount", errorCount);
                 }
 
                 if (selectedValues.length > sup) {
@@ -494,7 +457,6 @@
                     document.getElementById("id_error_anag").textContent = "Troppi utenti selezionati, eliminarne almeno " + delta;
                     errorCount++;
                     localStorage.setItem("errorCount", errorCount);
-                    console.log("errorCount", errorCount);
                 }
 
                 if(errorCount > 2) {
@@ -503,10 +465,8 @@
                     errorMessage.textContent = "Errore nella creazione del gruppo";
                     errorCount = 0;
                     localStorage.setItem("errorCount", errorCount);
-                    console.log("errorCount", errorCount);
                     orchestrator.refresh();
                 }
-
 
                 if(selectedValues.length >= inf && selectedValues.length <= sup) {
                     makeCall("POST", "CreateGroup?title=" + titolo + "&durata=" + durata + "&min_part=" + min_part + "&max_part=" + max_part+"&selectedUsers="+selectedValues, form,
@@ -526,18 +486,13 @@
                         }
                     );
                 }
-
             });
-
-
         }
 
         this.reset = function () {
             this.wizard.reset();
         }
     }
-
-
 
     function PageOrchestrator() {
         this.start = function () {
@@ -553,7 +508,6 @@
             );
 
             groupListCreated.show();
-
             // creating the group list invited
             groupListInvited = new GroupListInvited(
                 document.getElementById("groupInvitedContainer"),
@@ -564,7 +518,6 @@
 
             wizard = new Wizard(document.getElementById("create_group_form"));
             wizard.registerEvents(this);
-
 
             const detailModal = document.getElementById("myDetailModal");
             const detailSpan = document.getElementsByClassName("detail_close")[0];
@@ -580,24 +533,18 @@
                     detailsList.reset();
                 }
             }
-
             // adding listener to logout button
             document.getElementById("logout_btn").addEventListener("click",
                 () => {
                     sessionStorage.removeItem("user")
-                    console.log("Current user: ", sessionStorage.getItem("user"));
                 }
             )
-
-
-
         }
 
         this.refresh = function () {
             groupListCreated.reset();
             groupListInvited.reset();
             wizard.reset();
-            console.log("refreshed");
         }
     }
 }

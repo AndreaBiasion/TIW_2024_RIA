@@ -35,8 +35,6 @@ public class GetGroupsCreated extends HttpServlet {
         connection = ConnectionManager.getConnection(getServletContext());
     }
 
-
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();

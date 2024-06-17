@@ -100,19 +100,18 @@ button[type="submit"] {
 }
 
 .modal {
-    display: none; /* Modal is hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Disable scrolling */
-    background: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
-    align-items: center; /* Vertically center */
-    justify-content: center; /* Horizontally center */
-    backdrop-filter: blur(3px); /* Optional blur effect */
+    display: none;
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(3px);
 }
 
-/* Style the form inputs */
 input[type="number"],
 input[type="text"] {
     padding: 8px;
