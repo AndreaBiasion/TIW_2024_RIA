@@ -420,6 +420,9 @@
                                         });
                                     });
                                 }
+                                else{
+                                    errorMessage.textContent = message;
+                                }
                             }
                         }
                     );
@@ -476,7 +479,6 @@
                         function (req) {
                             if (req.readyState === XMLHttpRequest.DONE) {
                                 let message = req.responseText;
-
                                 if (req.status === 200) {
                                     errorMessage.textContent = "Gruppo creato con successo";
                                     errorCount = 0;

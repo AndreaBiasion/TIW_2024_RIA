@@ -93,6 +93,21 @@ public class CreateGroup extends HttpServlet {
             response.getWriter().println("parametri mancanti o scorretti");
             return;
         }
+        UserDAO userDAO = new UserDAO(connection);
+        String username = user.getUsername();
+        List<User> users;
+
+        try {
+            users = userDAO.getAllUsers(username);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        if(min_part -1 > users.size()){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().println("Errore: Il numero minimo di utenti è troppo alto");
+            return;
+        }
 
         if(errorCount > 2){
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
